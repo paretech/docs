@@ -13,7 +13,7 @@ Shift mindset from "what did you do?" to "why did it matter you were there?".
 
 For each position or project, answer these questions. 
 
-These questions are deliberately written in first person singular voice to form self referential prompts.
+These questions are deliberately written in first person singular voice to form self-referential prompts.
 
 ### "What problem space did I own?"
 
@@ -31,7 +31,7 @@ Examples:
 Focus On:
 - Systems you designed
 - Frameworks you introduced
-- Porcesses you stabalized
+- Processes you stabilized
 - Architectural decisions you made
 
 Avoid:
@@ -39,7 +39,7 @@ Avoid:
 - Team-wide accomplishments you merely participated in
 
 
-### "What technicl judgment did I make?"
+### "What technical judgment did I make?"
 
 > What trade-offs did I evaluate?
 
@@ -75,17 +75,17 @@ Do not chase perfect quantifiable metrics, sometimes "directional" outcomes are 
 
 ## Intentional Framing
 
-Framing refers to how you choose and structure your experiences. How these experiences are presented to your audience to build a controlled and favorable narrative. 
+Framing refers to how you choose and structure your experiences, presenting them to your audience as a controlled and favorable narrative. 
 
 Weak Framing:
->Worked on camaera calibration scripts and data collection.
+>Worked on camera calibration scripts and data collection.
 
 Intentional Framing:
 >Owned end-to-end camera calibration and data collection pipelines, enabling reliable multi-camera experiments across research platforms.
 
-Intentional framing provides the reader with enough information to infer ownership, scope, and impact. From the example, they would might infer that you are a systems level thinker.
+Intentional framing provides the reader with enough information to infer ownership, scope and impact. From the example, the reader may infer that you are a "systems" thinker.
 
-Framing is not exagerating or keyword stuffing. Framing is choosing the right way to present the experience to demonstrate your value add.
+Framing is not exaggerating or keyword stuffing. Framing is choosing the right way to present the experience to demonstrate your value.
 
 ### Characteristics of an intentionally framed experience
 
@@ -94,13 +94,13 @@ Framing is not exagerating or keyword stuffing. Framing is choosing the right wa
   - Strong: "Designed, owned, led, implemented" 
 - Broad Scope: How big was the system or problem?
   - Narrow: "Updated a script"
-  - Broad: "Build automation used across four product lines"
+  - Broad: "Built automations used across four product lines"
 - Explicit Intent: Why did this work exist?
   - Implicit: "Created dashboards"
   - Explicit: "Created dashboards to surface reliability regressions early"
-- Measureable Impact: What changed because of your work efforts?
+- Measurable Impact: What changed because of your work efforts?
   - Missing: "...using Python"
-  - Measureable: "...reduced setup time by 40% and imroved throughput" (quantifiable or directional)
+  - Measurable: "...reduced setup time by 40% and improved throughput" (quantifiable or directional)
 
 ### Refactoring Tips
   - If you did not have strong agency, remove or reframe the experience.
