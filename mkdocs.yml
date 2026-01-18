@@ -8,3 +8,8 @@ nav:
   - Notes:
       - Documenting Your Impact: notes/documenting-impact.md
       - Site Setup and Deployment: notes/site-setup.md
+
+markdown_extensions:
+  - pymdownx.saneheaders
+  - mdx_truly_sane_lists:
+      nested_indent: 2
