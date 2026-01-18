@@ -95,7 +95,7 @@ pip install mkdocs-material
 ### Serve Locally
 
 ```bash
-mkdocs serve
+mkdocs serve --livereload
 ```
 
 This starts a local server at `http://127.0.0.1:8000` with live reload.
