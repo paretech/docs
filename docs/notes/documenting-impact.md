@@ -20,6 +20,7 @@ These questions are deliberately written in first person singular voice to form 
 > What was broken, risky, slow, unclear, or impossible before I was involved?
 
 Examples:
+
 - Unreliable test infrastructure
 - Manual validation that didn't scale well
 - Fragile prototypes
