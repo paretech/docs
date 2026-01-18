@@ -1,6 +1,23 @@
-# Site Setup and Deployment
+# About This Site
+
+This site is a place where I can store my "evergreen" notes. I have used Microsoft OneNote for well over a decade. OneNote has generally served me well. However, a recent data loss event gave me pause. I needed a better place for the notes I care most about.
+
+!!! warning "Material for MkDocs in Maintenance Mode"
+    [As of November 6, 2025, Material for MkDocs is in maintenance mode](https://github.com/squidfunk/mkdocs-material/issues/8523).
+
+    - No new features to Material for MkDocs.
+    - Critical bug fixes and security updates through end of 2026.
+    - Maintainers encourage migrating to [Zensical](https://zensical.org/).
 
 This site is built with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) and deployed to [GitHub Pages](https://pages.github.com/) using the modern GitHub Actions workflow.
+
+I made the decision to start a new Material site after the maintenance mode announcement because:
+
+- Material is mature with a rich core and ecosystem
+- Material was trivial to setup and deploy with GitHub pages
+- [Zensical](https://zensical.org) is offering compatibility and an upgrade path if I want to go that way in the future.
+
+I wanted a personal documentation site that I could start using today rather than yet another project for tomorrow. Habits are hard to break, I am not yet sure how much I will use this site or how it might fit into my workflow.
 
 ## Architecture Overview
 
