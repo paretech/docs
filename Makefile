@@ -49,26 +49,29 @@
 # -----------------------------------------------------------------------------
 
 # -------- config --------
-VENV        := venv
-PYTHON      := python3
-PIP         := $(VENV)/bin/pip
-PY          := $(VENV)/bin/python
-MKDOCS      := $(VENV)/bin/mkdocs
-STAMP       := $(VENV)/bin/.deps
+VENV           := venv
+PYTHON         := python3
+PIP            := $(VENV)/bin/pip
+PY             := $(VENV)/bin/python
+MKDOCS         := $(VENV)/bin/mkdocs
+PRECOMMIT      := $(VENV)/bin/pre-commit
+STAMP          := $(VENV)/bin/.deps
+PRECOMMIT_HOOK := .git/hooks/pre-commit
 
-SITE_DIR := site
+SITE_DIR       := site
 
 # If you use extras, set this:
-EXTRAS      := dev
+EXTRAS         := dev
 
 # -------- targets --------
-.PHONY: help venv install serve build clean
+.PHONY: help venv install preview build lint clean
 
 help:
 	@echo "make venv     - create virtual environment"
 	@echo "make install  - install deps from pyproject.toml (editable)"
 	@echo "make preview  - run mkdocs dev server"
 	@echo "make build    - build static site"
+	@echo "make lint     - run pre-commit hooks on all files"
 	@echo "make clean    - remove virtualenv"
 
 $(VENV)/bin/activate:
@@ -82,7 +85,11 @@ $(STAMP): pyproject.toml | venv
 	$(PIP) install -e ".[${EXTRAS}]"
 	@touch $@
 
-install: $(STAMP)
+# Install pre-commit hook script into .git/hooks/
+$(PRECOMMIT_HOOK): $(STAMP)
+	$(PRECOMMIT) install
+
+install: $(PRECOMMIT_HOOK)
 
 preview: install
 	$(MKDOCS) serve --livereload
@@ -90,5 +97,8 @@ preview: install
 build: install
 	$(MKDOCS) build -d $(SITE_DIR)
 
+lint: install
+	$(PRECOMMIT) run --all-files
+
 clean:
-	rm -rf $(VENV) $(SITE_DIR)
+	rm -rf $(VENV) $(SITE_DIR) $(PRECOMMIT_HOOK)

@@ -159,7 +159,7 @@ repos:
 
 The hook auto-fixes issues when possible. If fixes are applied, the commit is blocked so you can review and re-commit.
 
-**Setup required**: Run `make setup` (see [Local Development](#local-development)).
+**Setup required**: Run `pre-commit install` after installing dependencies (see [Local Development](#local-development)).
 
 ### GitHub Action (CI)
 
@@ -185,6 +185,20 @@ Rules are configured in `.markdownlint.json`:
 
 **Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
 
+### Disabling Rules Inline
+
+To bypass a rule for a specific section, use HTML comments:
+
+```markdown
+<!-- markdownlint-disable MD033 -->
+<script>
+// inline HTML that would normally trigger MD033
+</script>
+<!-- markdownlint-enable MD033 -->
+```
+
+This keeps the rule active elsewhere while allowing exceptions where needed (e.g., the Game of Life on the home page).
+
 ### Running Lint Manually
 
 To check specific files outside of pre-commit or CI:
@@ -193,7 +207,7 @@ To check specific files outside of pre-commit or CI:
 npx markdownlint-cli2 docs/notes/site-setup.md
 ```
 
-Or lint all Markdown files:
+Or run all pre-commit hooks (including markdownlint) on all files:
 
 ```bash
 make lint
@@ -227,27 +241,28 @@ The GitHub Action only installs core dependencies. Local development installs bo
 
 ### Prerequisites
 
-Install dependencies using the Makefile:
+Dependencies install automatically when you run `make preview` or `make build`. The Makefile creates a virtual environment and installs packages from `pyproject.toml` as needed.
+
+To install dependencies explicitly:
 
 ```bash
-make setup
+make install
 ```
-
-This runs `pip install -e ".[dev]"` to install all dependencies (core + dev) in editable mode, then configures the pre-commit hook.
 
 ### Makefile Commands
 
 | Command | Description |
 |---------|-------------|
-| `make setup` | Install dependencies and configure pre-commit hook |
-| `make serve` | Run local dev server at `http://127.0.0.1:8000` |
+| `make preview` | Run local dev server at `http://127.0.0.1:8000` (installs deps if needed) |
 | `make build` | Build static site to `site/` directory |
-| `make lint` | Run markdownlint on all Markdown files |
+| `make lint` | Run all pre-commit hooks on all files |
+| `make install` | Install dependencies explicitly |
+| `make clean` | Remove virtual environment and built site |
 
 ### Serve Locally
 
 ```bash
-make serve
+make preview
 ```
 
 This starts a local server at `http://127.0.0.1:8000` with live reload.
