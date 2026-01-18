@@ -157,12 +157,26 @@ on:
 
 Rules are configured in `.markdownlint.json`:
 
-| Rule | Setting | Reason |
-|------|---------|--------|
-| MD013 | Disabled | No line length limit (prose wraps naturally) |
-| MD024 | `siblings_only: true` | Allows duplicate headings in different sections |
+- **MD013** (line length): Disabled — prose wraps naturally
+- **MD024** (duplicate headings): `siblings_only: true` — allows duplicate headings in different sections
+- **MD046** (code block style): Disabled — false positives from Material admonitions (indented content is required syntax, not code blocks)
+- **MD060** (table column style): Disabled — pedantic; tables render correctly without strict pipe alignment
 
 **Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
+
+### Running Lint Manually
+
+To check specific files outside of pre-commit or CI:
+
+```bash
+npx markdownlint-cli2 docs/notes/site-setup.md
+```
+
+Or lint all Markdown files:
+
+```bash
+make lint
+```
 
 ## Dependencies
 
