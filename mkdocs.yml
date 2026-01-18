@@ -7,3 +7,4 @@ nav:
   - Home: index.md
   - Notes:
       - Documenting Your Impact: notes/documenting-impact.md
+      - Site Setup and Deployment: notes/site-setup.md
