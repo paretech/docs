@@ -34,3 +34,16 @@ This is incorrect because both parts are independent clauses:
 - **Semicolon**: Preserves a close relationship between ideas while keeping them in one sentence. Use when the second clause directly follows from or contrasts with the first.
 - **Conjunction**: Adds explicit logical connection (because, and, but, so). Use when you want to clarify the relationship.
 - **Em dash**: Adds emphasis or a dramatic pause. Use sparingly for stylistic effect.
+
+## Commonly Misspelled Words
+
+- compatibility
+  - Not: compatability
+  - Tip: Comes from "compatible" → drop the 'e', add "-ibility" (not "-ability")
+
+## Common Idioms
+
+### give (someone) pause
+
+- **Meaning**: To cause hesitation or reconsideration
+- **Example**: "The unexpected cost gave me pause before signing the contract."

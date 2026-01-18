@@ -4,8 +4,8 @@ setup:
 	pip install -e ".[dev]"
 	pre-commit install
 
-serve:
-	mkdocs serve
+preview:
+	mkdocs serve --livereload
 
 build:
 	mkdocs build

@@ -1,6 +1,23 @@
-# Site Setup and Deployment
+# About This Site
+
+This site is a place where I can store my "evergreen" notes. I have used Microsoft OneNote for well over a decade. OneNote has generally served me well. However, a recent data loss event gave me pause. I needed a better place for the notes I care most about.
+
+!!! warning "Material for MkDocs in Maintenance Mode"
+    [As of November 6, 2025, Material for MkDocs is in maintenance mode](https://github.com/squidfunk/mkdocs-material/issues/8523).
+
+    - No new features to Material for MkDocs.
+    - Critical bug fixes and security updates through end of 2026.
+    - Maintainers encourage migrating to [Zensical](https://zensical.org/).
 
 This site is built with [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) and deployed to [GitHub Pages](https://pages.github.com/) using the modern GitHub Actions workflow.
+
+I made the decision to start a new Material site after the maintenance mode announcement because:
+
+- Material is mature with a rich core and ecosystem
+- Material was trivial to setup and deploy with GitHub pages
+- [Zensical](https://zensical.org) is offering compatibility and an upgrade path if I want to go that way in the future.
+
+I wanted a personal documentation site that I could start using today rather than yet another project for tomorrow. Habits are hard to break, I am not yet sure how much I will use this site or how it might fit into my workflow.
 
 ## Architecture Overview
 
@@ -19,6 +36,27 @@ Local Development          GitHub                    GitHub Pages
 The site configuration lives in `mkdocs.yml` at the repository root:
 
 **Documentation**: [MkDocs Configuration](https://www.mkdocs.org/user-guide/configuration/)
+
+### Navigation
+
+The site uses Material's `navigation.tabs` feature to display top-level sections as tabs at the top of the page.
+
+```yaml
+theme:
+  features:
+    - navigation.tabs
+```
+
+**Auto-population**: There is no `nav` section in `mkdocs.yml`. MkDocs automatically generates navigation from the folder structure under `docs/`. Files are sorted alphabetically, and folder names become section titles.
+
+**When to add explicit `nav`**:
+
+- You need a specific ordering (not alphabetical)
+- You want custom titles different from header
+- You want to exclude certain files from navigation
+- The auto-generated structure becomes confusing as the site grows
+
+**Documentation**: [Material - Navigation tabs](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-tabs)
 
 ### GitHub Actions Workflow
 
@@ -140,12 +178,26 @@ on:
 
 Rules are configured in `.markdownlint.json`:
 
-| Rule | Setting | Reason |
-|------|---------|--------|
-| MD013 | Disabled | No line length limit (prose wraps naturally) |
-| MD024 | `siblings_only: true` | Allows duplicate headings in different sections |
+- **MD013** (line length): Disabled — prose wraps naturally
+- **MD024** (duplicate headings): `siblings_only: true` — allows duplicate headings in different sections
+- **MD046** (code block style): Disabled — false positives from Material admonitions (indented content is required syntax, not code blocks)
+- **MD060** (table column style): Disabled — pedantic; tables render correctly without strict pipe alignment
 
 **Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
+
+### Running Lint Manually
+
+To check specific files outside of pre-commit or CI:
+
+```bash
+npx markdownlint-cli2 docs/notes/site-setup.md
+```
+
+Or lint all Markdown files:
+
+```bash
+make lint
+```
 
 ## Dependencies
 
