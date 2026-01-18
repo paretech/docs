@@ -6,10 +6,10 @@ This site is built with [Material for MkDocs](https://squidfunk.github.io/mkdocs
 
 ```
 Local Development          GitHub                    GitHub Pages
-┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+┌─────────────────┐        ┌─────────────────┐       ┌─────────────────┐
 │  mkdocs serve   │──push─▶│  GitHub Actions │──────▶│  Static Site    │
-│  (localhost)    │       │  (build/deploy) │       │  (public URL)   │
-└─────────────────┘       └─────────────────┘       └─────────────────┘
+│  (localhost)    │        │  (build/deploy) │       │  (public URL)   │
+└─────────────────┘        └─────────────────┘       └─────────────────┘
 ```
 
 ## Key Components
@@ -18,64 +18,11 @@ Local Development          GitHub                    GitHub Pages
 
 The site configuration lives in `mkdocs.yml` at the repository root:
 
-```yaml
-site_name: Docs
-site_url: https://paretech.github.io/docs
-theme:
-  name: material
-nav:
-  - Home: index.md
-  - Notes:
-      - Page Title: notes/example.md
-```
-
 **Documentation**: [MkDocs Configuration](https://www.mkdocs.org/user-guide/configuration/)
 
 ### GitHub Actions Workflow
 
 The deployment workflow (`.github/workflows/ci.yml`) uses the modern artifact-based approach rather than the legacy `gh-deploy` method.
-
-```yaml
-name: ci
-on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-      - run: pip install mkdocs-material
-      - run: mkdocs build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-```
 
 #### Why Two Jobs?
 
