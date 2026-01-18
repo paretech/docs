@@ -3,12 +3,6 @@ site_url: https://paretech.github.io/docs
 theme:
   name: material
   logo: assets/paretech_logo.png
-nav:
-  - Home: index.md
-  - Notes:
-      - Documenting Your Impact: notes/documenting-impact.md
-      - Site Setup and Deployment: notes/site-setup.md
-
 markdown_extensions:
   - pymdownx.saneheaders
   - mdx_truly_sane_lists:
