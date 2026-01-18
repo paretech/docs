@@ -1,4 +1,4 @@
-site_name: Docs
+site_name: Paretech Docs
 site_url: https://paretech.github.io/docs
 theme:
   name: material
