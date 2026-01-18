@@ -121,12 +121,7 @@ repos:
 
 The hook auto-fixes issues when possible. If fixes are applied, the commit is blocked so you can review and re-commit.
 
-**Setup required**: Run `make setup` or manually:
-
-```bash
-pip install pre-commit
-pre-commit install
-```
+**Setup required**: Run `make setup` (see [Local Development](#local-development)).
 
 ### GitHub Action (CI)
 
@@ -152,6 +147,30 @@ Rules are configured in `.markdownlint.json`:
 
 **Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
 
+## Dependencies
+
+Dependencies are managed in `pyproject.toml` using optional dependency groups:
+
+```toml
+[project]
+dependencies = [          # Core: required for building
+    "mkdocs-material",
+    "mdx-truly-sane-lists",
+]
+
+[project.optional-dependencies]
+dev = [                   # Dev: only needed locally
+    "pre-commit",
+]
+```
+
+| Group | Installed by | Used for |
+|-------|--------------|----------|
+| Core (`dependencies`) | `pip install .` | Building the site (CI and local) |
+| Dev (`[dev]`) | `pip install -e ".[dev]"` | Local development (pre-commit, etc.) |
+
+The GitHub Action only installs core dependencies. Local development installs both.
+
 ## Local Development
 
 ### Prerequisites
@@ -162,7 +181,7 @@ Install dependencies using the Makefile:
 make setup
 ```
 
-This installs MkDocs, plugins, and configures the pre-commit hook.
+This runs `pip install -e ".[dev]"` to install all dependencies (core + dev) in editable mode, then configures the pre-commit hook.
 
 ### Makefile Commands
 

@@ -1,8 +1,7 @@
 .PHONY: setup serve build lint
 
 setup:
-	pip install -r requirements.txt
-	pip install pre-commit
+	pip install -e ".[dev]"
 	pre-commit install
 
 serve:
