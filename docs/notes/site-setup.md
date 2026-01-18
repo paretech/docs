@@ -84,18 +84,99 @@ There are two common approaches to deploying MkDocs to GitHub Pages:
 
 **Documentation**: [Material for MkDocs - Publishing Your Site](https://squidfunk.github.io/mkdocs-material/publishing-your-site/)
 
+## Markdown Linting
+
+This site uses [markdownlint](https://github.com/DavidAnson/markdownlint) to enforce consistent Markdown formatting. Linting is configured at three levels:
+
+### VS Code (Editor)
+
+The `davidanson.vscode-markdownlint` extension provides inline warnings and auto-fix on save.
+
+Configuration in `.vscode/settings.json`:
+
+```json
+"[markdown]": {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.markdownlint": "explicit"
+  }
+}
+```
+
+The `"explicit"` value means fixes run on manual save (Cmd+S), not on auto-save.
+
+### Pre-commit Hook (Local)
+
+The [pre-commit](https://pre-commit.com/) framework runs markdownlint before each commit.
+
+Configuration in `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.1
+    hooks:
+      - id: markdownlint-cli2
+        args: ["--fix"]
+```
+
+The hook auto-fixes issues when possible. If fixes are applied, the commit is blocked so you can review and re-commit.
+
+**Setup required**: Run `make setup` or manually:
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+### GitHub Action (CI)
+
+The lint workflow (`.github/workflows/lint.yml`) runs on pushes to `main` and on pull requests when Markdown files change. This catches issues from GitHub web UI edits.
+
+```yaml
+on:
+  push:
+    branches: [main]
+    paths: ["**.md"]
+  pull_request:
+    paths: ["**.md"]
+```
+
+### Lint Rules
+
+Rules are configured in `.markdownlint.json`:
+
+| Rule | Setting | Reason |
+|------|---------|--------|
+| MD013 | Disabled | No line length limit (prose wraps naturally) |
+| MD024 | `siblings_only: true` | Allows duplicate headings in different sections |
+
+**Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
+
 ## Local Development
 
 ### Prerequisites
 
+Install dependencies using the Makefile:
+
 ```bash
-pip install mkdocs-material
+make setup
 ```
+
+This installs MkDocs, plugins, and configures the pre-commit hook.
+
+### Makefile Commands
+
+| Command | Description |
+|---------|-------------|
+| `make setup` | Install dependencies and configure pre-commit hook |
+| `make serve` | Run local dev server at `http://127.0.0.1:8000` |
+| `make build` | Build static site to `site/` directory |
+| `make lint` | Run markdownlint on all Markdown files |
 
 ### Serve Locally
 
 ```bash
-mkdocs serve --livereload
+make serve
 ```
 
 This starts a local server at `http://127.0.0.1:8000` with live reload.
@@ -103,7 +184,7 @@ This starts a local server at `http://127.0.0.1:8000` with live reload.
 ### Build Locally
 
 ```bash
-mkdocs build
+make build
 ```
 
 This generates the static site in the `site/` directory.
