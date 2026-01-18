@@ -1,3 +1,5 @@
+# Site Setup Rules
+
 When making changes to site configuration, build process, dependencies, or development workflow:
 
 - Recommend updating docs/notes/site-setup.md to reflect the changes

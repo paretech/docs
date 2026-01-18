@@ -4,7 +4,7 @@ This site is built with [Material for MkDocs](https://squidfunk.github.io/mkdocs
 
 ## Architecture Overview
 
-```
+```ASCII
 Local Development          GitHub                    GitHub Pages
 ┌─────────────────┐        ┌─────────────────┐       ┌─────────────────┐
 │  mkdocs serve   │──push─▶│  GitHub Actions │──────▶│  Static Site    │
@@ -220,8 +220,8 @@ nav:
       - New Page: notes/new-page.md
 ```
 
-3. Commit and push to `main`
-4. The GitHub Action will automatically build and deploy
+1. Commit and push to `main`
+2. The GitHub Action will automatically build and deploy
 
 ## Troubleshooting
 
