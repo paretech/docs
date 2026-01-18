@@ -3,3 +3,7 @@ site_url: https://paretech.github.io/docs
 theme:
   name: material
   logo: assets/paretech_logo.png
+nav:
+  - Home: index.md
+  - Notes:
+      - Documenting Your Impact: notes/documenting-impact.md
