@@ -29,12 +29,14 @@ Examples:
 > What would not exist, or be worse, if I had not been there?
 
 Focus On:
+
 - Systems you designed
 - Frameworks you introduced
 - Processes you stabilized
 - Architectural decisions you made
 
 Avoid:
+
 - Tool lists
 - Team-wide accomplishments you merely participated in
 
@@ -101,6 +103,3 @@ Framing is not exaggerating or keyword stuffing. Framing is choosing the right w
 - Measurable Impact: What changed because of your work efforts?
   - Missing: "...using Python"
   - Measurable: "...reduced setup time by 40% and improved throughput" (quantifiable or directional)
-
-### Refactoring Tips
-  - If you did not have strong agency, remove or reframe the experience.
