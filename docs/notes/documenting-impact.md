@@ -2,16 +2,15 @@
 
 ## Purpose
 
-A process for extracting signals about a role, team, and expectations. 
+A process for extracting signals about a role, team, and expectations.
 
 Useful for interviews, resume framing, and role evaluation.
-
 
 ## Exploratory Questions
 
 Shift mindset from "what did you do?" to "why did it matter you were there?".
 
-For each position or project, answer these questions. 
+For each position or project, answer these questions.
 
 These questions are deliberately written in first person singular voice to form self-referential prompts.
 
@@ -20,6 +19,7 @@ These questions are deliberately written in first person singular voice to form 
 > What was broken, risky, slow, unclear, or impossible before I was involved?
 
 Examples:
+
 - Unreliable test infrastructure
 - Manual validation that didn't scale well
 - Fragile prototypes
@@ -29,22 +29,23 @@ Examples:
 > What would not exist, or be worse, if I had not been there?
 
 Focus On:
+
 - Systems you designed
 - Frameworks you introduced
 - Processes you stabilized
 - Architectural decisions you made
 
 Avoid:
+
 - Tool lists
 - Team-wide accomplishments you merely participated in
-
 
 ### "What technical judgment did I make?"
 
 > What trade-offs did I evaluate?
-
+>
 > What constraints did I balance (time, money, quality, performance, technical, organizational)?
-
+>
 > Where did I choose not to over-engineer?
 
 ### "Who relied on my work?"
@@ -75,7 +76,7 @@ Do not chase perfect quantifiable metrics, sometimes "directional" outcomes are 
 
 ## Intentional Framing
 
-Framing refers to how you choose and structure your experiences, presenting them to your audience as a controlled and favorable narrative. 
+Framing refers to how you choose and structure your experiences, presenting them to your audience as a controlled and favorable narrative.
 
 Weak Framing:
 >Worked on camera calibration scripts and data collection.
@@ -89,9 +90,9 @@ Framing is not exaggerating or keyword stuffing. Framing is choosing the right w
 
 ### Characteristics of an intentionally framed experience
 
-- Strong Agency: Who is the actor? 
+- Strong Agency: Who is the actor?
   - Limited: "was involved in"
-  - Strong: "Designed, owned, led, implemented" 
+  - Strong: "Designed, owned, led, implemented"
 - Broad Scope: How big was the system or problem?
   - Narrow: "Updated a script"
   - Broad: "Built automations used across four product lines"
@@ -101,6 +102,3 @@ Framing is not exaggerating or keyword stuffing. Framing is choosing the right w
 - Measurable Impact: What changed because of your work efforts?
   - Missing: "...using Python"
   - Measurable: "...reduced setup time by 40% and improved throughput" (quantifiable or directional)
-
-### Refactoring Tips
-  - If you did not have strong agency, remove or reframe the experience.

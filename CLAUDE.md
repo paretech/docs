@@ -1,6 +1,6 @@
 # Project Context
 
-Personal documentation site built with Material for MkDocs, hosted at https://paretech.github.io/docs/
+Personal documentation site built with Material for MkDocs, hosted at <https://paretech.github.io/docs/>
 
 ## Structure
 

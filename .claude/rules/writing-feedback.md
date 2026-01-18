@@ -1,3 +1,5 @@
+# Writing Feedback Rules
+
 When reviewing documents for spelling, grammar, and clarity:
 
 - Always explain the "why" behind suggested corrections

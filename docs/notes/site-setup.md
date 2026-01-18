@@ -4,12 +4,12 @@ This site is built with [Material for MkDocs](https://squidfunk.github.io/mkdocs
 
 ## Architecture Overview
 
-```
+```ASCII
 Local Development          GitHub                    GitHub Pages
-┌─────────────────┐       ┌─────────────────┐       ┌─────────────────┐
+┌─────────────────┐        ┌─────────────────┐       ┌─────────────────┐
 │  mkdocs serve   │──push─▶│  GitHub Actions │──────▶│  Static Site    │
-│  (localhost)    │       │  (build/deploy) │       │  (public URL)   │
-└─────────────────┘       └─────────────────┘       └─────────────────┘
+│  (localhost)    │        │  (build/deploy) │       │  (public URL)   │
+└─────────────────┘        └─────────────────┘       └─────────────────┘
 ```
 
 ## Key Components
@@ -18,64 +18,11 @@ Local Development          GitHub                    GitHub Pages
 
 The site configuration lives in `mkdocs.yml` at the repository root:
 
-```yaml
-site_name: Docs
-site_url: https://paretech.github.io/docs
-theme:
-  name: material
-nav:
-  - Home: index.md
-  - Notes:
-      - Page Title: notes/example.md
-```
-
 **Documentation**: [MkDocs Configuration](https://www.mkdocs.org/user-guide/configuration/)
 
 ### GitHub Actions Workflow
 
 The deployment workflow (`.github/workflows/ci.yml`) uses the modern artifact-based approach rather than the legacy `gh-deploy` method.
-
-```yaml
-name: ci
-on:
-  push:
-    branches:
-      - main
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-      - run: pip install mkdocs-material
-      - run: mkdocs build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-```
 
 #### Why Two Jobs?
 
@@ -137,18 +84,118 @@ There are two common approaches to deploying MkDocs to GitHub Pages:
 
 **Documentation**: [Material for MkDocs - Publishing Your Site](https://squidfunk.github.io/mkdocs-material/publishing-your-site/)
 
+## Markdown Linting
+
+This site uses [markdownlint](https://github.com/DavidAnson/markdownlint) to enforce consistent Markdown formatting. Linting is configured at three levels:
+
+### VS Code (Editor)
+
+The `davidanson.vscode-markdownlint` extension provides inline warnings and auto-fix on save.
+
+Configuration in `.vscode/settings.json`:
+
+```json
+"[markdown]": {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.markdownlint": "explicit"
+  }
+}
+```
+
+The `"explicit"` value means fixes run on manual save (Cmd+S), not on auto-save.
+
+### Pre-commit Hook (Local)
+
+The [pre-commit](https://pre-commit.com/) framework runs markdownlint before each commit.
+
+Configuration in `.pre-commit-config.yaml`:
+
+```yaml
+repos:
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.1
+    hooks:
+      - id: markdownlint-cli2
+        args: ["--fix"]
+```
+
+The hook auto-fixes issues when possible. If fixes are applied, the commit is blocked so you can review and re-commit.
+
+**Setup required**: Run `make setup` (see [Local Development](#local-development)).
+
+### GitHub Action (CI)
+
+The lint workflow (`.github/workflows/lint.yml`) runs on pushes to `main` and on pull requests when Markdown files change. This catches issues from GitHub web UI edits.
+
+```yaml
+on:
+  push:
+    branches: [main]
+    paths: ["**.md"]
+  pull_request:
+    paths: ["**.md"]
+```
+
+### Lint Rules
+
+Rules are configured in `.markdownlint.json`:
+
+| Rule | Setting | Reason |
+|------|---------|--------|
+| MD013 | Disabled | No line length limit (prose wraps naturally) |
+| MD024 | `siblings_only: true` | Allows duplicate headings in different sections |
+
+**Documentation**: [markdownlint rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md)
+
+## Dependencies
+
+Dependencies are managed in `pyproject.toml` using optional dependency groups:
+
+```toml
+[project]
+dependencies = [          # Core: required for building
+    "mkdocs-material",
+    "mdx-truly-sane-lists",
+]
+
+[project.optional-dependencies]
+dev = [                   # Dev: only needed locally
+    "pre-commit",
+]
+```
+
+| Group | Installed by | Used for |
+|-------|--------------|----------|
+| Core (`dependencies`) | `pip install .` | Building the site (CI and local) |
+| Dev (`[dev]`) | `pip install -e ".[dev]"` | Local development (pre-commit, etc.) |
+
+The GitHub Action only installs core dependencies. Local development installs both.
+
 ## Local Development
 
 ### Prerequisites
 
+Install dependencies using the Makefile:
+
 ```bash
-pip install mkdocs-material
+make setup
 ```
+
+This runs `pip install -e ".[dev]"` to install all dependencies (core + dev) in editable mode, then configures the pre-commit hook.
+
+### Makefile Commands
+
+| Command | Description |
+|---------|-------------|
+| `make setup` | Install dependencies and configure pre-commit hook |
+| `make serve` | Run local dev server at `http://127.0.0.1:8000` |
+| `make build` | Build static site to `site/` directory |
+| `make lint` | Run markdownlint on all Markdown files |
 
 ### Serve Locally
 
 ```bash
-mkdocs serve
+make serve
 ```
 
 This starts a local server at `http://127.0.0.1:8000` with live reload.
@@ -156,7 +203,7 @@ This starts a local server at `http://127.0.0.1:8000` with live reload.
 ### Build Locally
 
 ```bash
-mkdocs build
+make build
 ```
 
 This generates the static site in the `site/` directory.
@@ -173,8 +220,8 @@ nav:
       - New Page: notes/new-page.md
 ```
 
-3. Commit and push to `main`
-4. The GitHub Action will automatically build and deploy
+1. Commit and push to `main`
+2. The GitHub Action will automatically build and deploy
 
 ## Troubleshooting
 

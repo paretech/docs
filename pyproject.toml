@@ -1,0 +1,14 @@
+[project]
+name = "paretech-docs"
+version = "0.1.0"
+description = "Personal documentation site"
+requires-python = ">=3.9"
+dependencies = [
+    "mkdocs-material",
+    "mdx-truly-sane-lists",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+]
