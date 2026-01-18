@@ -37,6 +37,27 @@ The site configuration lives in `mkdocs.yml` at the repository root:
 
 **Documentation**: [MkDocs Configuration](https://www.mkdocs.org/user-guide/configuration/)
 
+### Navigation
+
+The site uses Material's `navigation.tabs` feature to display top-level sections as tabs at the top of the page.
+
+```yaml
+theme:
+  features:
+    - navigation.tabs
+```
+
+**Auto-population**: There is no `nav` section in `mkdocs.yml`. MkDocs automatically generates navigation from the folder structure under `docs/`. Files are sorted alphabetically, and folder names become section titles.
+
+**When to add explicit `nav`**:
+
+- You need a specific ordering (not alphabetical)
+- You want custom titles different from header
+- You want to exclude certain files from navigation
+- The auto-generated structure becomes confusing as the site grows
+
+**Documentation**: [Material - Navigation tabs](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-tabs)
+
 ### GitHub Actions Workflow
 
 The deployment workflow (`.github/workflows/ci.yml`) uses the modern artifact-based approach rather than the legacy `gh-deploy` method.
