@@ -2,6 +2,21 @@
 
 > This note is populated based on lessons learned during writing reviews with Claude. See `.claude/rules/writing-feedback.md` for the rule that drives this behavior.
 
+## Latin Abbreviations
+
+### e.g. and i.e
+
+Both abbreviations are conventionally followed by a comma in American English.
+
+| Abbreviation | Latin | Meaning | Example |
+|--------------|-------|---------|---------|
+| **e.g.** | *exempli gratia* | "for example" | Prefer open transitions (e.g., open stairwell) |
+| **i.e.** | *id est* | "that is" | Use the primary entrance (i.e., the front door) |
+
+**Tip**: Treat them like their English equivalents—"for example," and "that is,"—comma included.
+
+**Note**: British English often omits the comma. Both styles are understood, but the comma version is considered more formally correct in American usage.
+
 ## Comma Splices
 
 ### What is a Comma Splice?
