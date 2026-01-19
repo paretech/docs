@@ -328,3 +328,6 @@ permissions:
 ## TODO
 
 - Add social links (GitHub, LinkedIn, RSS) to bottom of page. See [Alex Harri's website](https://alexharri.com/blog) for an example.
+- Make it so google docs can replace link with title
+- Enable syntax highlighting
+- Enable copy code block
