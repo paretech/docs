@@ -324,3 +324,7 @@ permissions:
 - [GitHub - Using Custom Workflows with GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 - [actions/deploy-pages](https://github.com/actions/deploy-pages)
 - [actions/upload-pages-artifact](https://github.com/actions/upload-pages-artifact)
+
+## TODO
+
+- Add social links (GitHub, LinkedIn, RSS) to bottom of page. See [Alex Harri's website](https://alexharri.com/blog) for an example.
