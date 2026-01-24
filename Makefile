@@ -57,6 +57,8 @@ MKDOCS         := $(VENV)/bin/mkdocs
 PRECOMMIT      := $(VENV)/bin/pre-commit
 STAMP          := $(VENV)/bin/.deps
 PRECOMMIT_HOOK := .git/hooks/pre-commit
+SPELL_FILES    ?= "docs/**/*.md"
+
 
 SITE_DIR       := site
 
@@ -64,7 +66,7 @@ SITE_DIR       := site
 EXTRAS         := dev
 
 # -------- targets --------
-.PHONY: help venv install preview build lint clean
+.PHONY: help venv install preview build lint spell clean
 
 help:
 	@echo "make venv     - create virtual environment"
@@ -72,6 +74,7 @@ help:
 	@echo "make preview  - run mkdocs dev server"
 	@echo "make build    - build static site"
 	@echo "make lint     - run pre-commit hooks on all files"
+	@echo "make spell    - run spell check on docs (SPELL_FILES=file to target specific files)"
 	@echo "make clean    - remove virtualenv"
 
 $(VENV)/bin/activate:
@@ -99,6 +102,10 @@ build: install
 
 lint: install
 	$(PRECOMMIT) run --all-files
+
+# cspell lazy installed on first use. 
+spell:
+	-npx cspell lint $(SPELL_FILES) --no-progress --config cspell.json
 
 clean:
 	rm -rf $(VENV) $(SITE_DIR) $(PRECOMMIT_HOOK)

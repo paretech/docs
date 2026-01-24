@@ -1,0 +1,19 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "mkdocs",
+    "paretech",
+    "zensical",
+    "venv",
+    "pyproject",
+    "virtualenv",
+    "setuptools",
+    "livereload",
+    "pyenv"
+  ],
+  "ignorePaths": [
+    ".git",
+    "site"
+  ]
+}

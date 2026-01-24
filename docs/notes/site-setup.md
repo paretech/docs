@@ -134,13 +134,21 @@ Configuration in `.vscode/settings.json`:
 
 ```json
 "[markdown]": {
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 100,
+  "editor.rulers": [100],
   "editor.codeActionsOnSave": {
     "source.fixAll.markdownlint": "explicit"
   }
 }
 ```
 
-The `"explicit"` value means fixes run on manual save (Cmd+S), not on auto-save.
+| Setting | Purpose |
+|---------|---------|
+| `wordWrap: "bounded"` | Wraps at the smaller of viewport width or `wordWrapColumn` — adapts to narrow windows |
+| `wordWrapColumn: 100` | Maximum line width before wrapping |
+| `rulers: [100]` | Visual guide at column 100 |
+| `codeActionsOnSave` | Auto-fix markdownlint issues on manual save (Cmd+S), not on auto-save |
 
 ### Pre-commit Hook (Local)
 
@@ -213,6 +221,74 @@ Or run all pre-commit hooks (including markdownlint) on all files:
 make lint
 ```
 
+## Spell Checking
+
+This site uses [cspell](https://cspell.org/) (Code Spell Checker) for spell checking in the editor.
+
+### VS Code
+
+The `streetsidesoftware.code-spell-checker` extension provides inline spell checking. Unknown words are underlined; right-click to add them to the project dictionary.
+
+### Configuration
+
+Project-specific words are stored in `cspell.json` at the repository root:
+
+```json
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "mkdocs",
+    "paretech",
+    "zensical"
+  ],
+  "ignorePaths": [
+    ".git",
+    "site"
+  ]
+}
+```
+
+Add new words as you encounter false positives. The `ignorePaths` setting skips the `.git` directory and the `site` build output.
+
+**Why root instead of `.vscode/`?** Keeping config in root allows the `make spell` command and future CI integration to use the same config without extra path flags.
+
+### Running Spell Check Manually
+
+```bash
+make spell                                      # Check all docs
+make spell SPELL_FILES=docs/notes/site-setup.md # Check specific file
+```
+
+### Disabling Spell Check Inline
+
+Use HTML comments to bypass spell checking for deliberate misspellings or unusual terms:
+
+**Disable for a section** (e.g., a list of commonly misspelled words):
+
+```markdown
+<!-- cspell:disable -->
+- accomodate (should be accommodate)
+- occured (should be occurred)
+<!-- cspell:enable -->
+```
+
+**Disable for next line only:**
+
+```markdown
+<!-- cspell:disable-next-line -->
+- seperate (should be separate)
+```
+
+**Ignore specific words:**
+
+```markdown
+<!-- cspell:ignore wierd definately -->
+Common misspellings include wierd and definately.
+```
+
+**Documentation**: [cspell Configuration](https://cspell.org/configuration/)
+
 ## Dependencies
 
 Dependencies are managed in `pyproject.toml` using optional dependency groups:
@@ -256,6 +332,7 @@ make install
 | `make preview` | Run local dev server at `http://127.0.0.1:8000` (installs deps if needed) |
 | `make build` | Build static site to `site/` directory |
 | `make lint` | Run all pre-commit hooks on all files |
+| `make spell` | Run spell check on docs (`SPELL_FILES=file` to target specific files) |
 | `make install` | Install dependencies explicitly |
 | `make clean` | Remove virtual environment and built site |
 

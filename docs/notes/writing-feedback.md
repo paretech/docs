@@ -53,8 +53,9 @@ This is incorrect because both parts are independent clauses:
 ## Commonly Misspelled Words
 
 - compatibility
-  - Not: compatability
-  - Tip: Comes from "compatible" → drop the 'e', add "-ibility" (not "-ability")
+<!-- cspell:ignore compatability ibility -->
+- Not: compatability
+- Tip: Comes from "compatible" → drop the 'e', add "-ibility" (not "-ability")
 
 ## Common Idioms
 
