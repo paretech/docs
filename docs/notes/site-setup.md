@@ -408,3 +408,5 @@ permissions:
 - Make it so google docs can replace link with title
 - Enable syntax highlighting
 - Enable copy code block
+- Favicon
+- RSS Feed
