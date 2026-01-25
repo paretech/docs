@@ -1,4 +1,4 @@
-# Adding an Access Point to an Existing Network
+# More WIFI APs
 
 - Network Survey (run speed tests from various locations around house)
 - Create new dice password for admin interface
