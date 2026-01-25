@@ -6,13 +6,15 @@ A process for extracting signals about a role, team, and expectations.
 
 Useful for interviews, resume framing, and role evaluation.
 
-## Exploratory Questions
+## Impact Questions
 
 Shift mindset from "what did you do?" to "why did it matter you were there?".
 
 For each position or project, answer these questions.
 
 These questions are deliberately written in first person singular voice to form self-referential prompts.
+
+Try to respond to these questions in single-line bullet form. Doing so will make indecision less likely and easier to revisit and refine. If you are having trouble, feel free to use a longer narrative form, but realize that may be expensive.
 
 ### "What problem space did I own?"
 
@@ -42,6 +44,8 @@ Avoid:
 
 ### "What technical judgment did I make?"
 
+> What decisions did I make?
+>
 > What trade-offs did I evaluate?
 >
 > What constraints did I balance (time, money, quality, performance, technical, organizational)?
