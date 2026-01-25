@@ -1,0 +1,77 @@
+# Adding an Access Point to an Existing Network
+
+- Network Survey (run speed tests from various locations around house)
+- Create new dice password for admin interface
+- Connect new router via LAN port to existing LAN
+- Timezone Pacific Time (UTC-0800)
+- Settings - "Device A" (existing device)
+  - Tp-Link Id/Cloud Service: Disable
+  - Wireless
+    - Wireless Settings
+      - OFDMA: Enable
+      - Smart Connect: Disabled
+        - Unable to set channel settings on AX50 with Smart Connect enabled.
+      - Wireless Settings - 2.4 GHz
+        - Security: WPA/WPA2-Personal
+        - Version: WPA2-PSK
+        - Encryption: AES
+        - Mode: 802.11b/g/n/ax mixed
+        - 2.4 GHz Channel Width: 20 MHz
+        - 2.4 GHz Channel: 1
+        - Transmit Power: Middle (TBR)
+        - Airtime Fairness Feature: Disabled
+      - Wireless Settings - 5 GHz
+        - Security: WPA/WPA2-Personal
+        - Version: WPA2-PSK
+        - Encryption: AES
+        - Mode: 802.11b/g/n/ax mixed
+        - 5 GHz Channel Width: 80 MHz (TBR)
+        - 5 GHz Channel: 36
+        - Airtime Fairness Feature: Disabled
+        - Multi-User MIMO: Enable Multi-User MIMO
+  - Advanced
+    - System
+      - Administration
+        - Local Management via HTTPS: Enable
+        - Local Managers: All Devices
+      - Operation Mode: Access Point Mode
+    - System Tools
+      - Reboot Schedule
+        - Reboot Schedule: Enabled
+        - Reboot Time: 3:00 AM
+        - Repeat: Every Week Monday
+      - System Parameters
+        - WPS: Disabled
+- Settings - "Device B" (new device)
+  - Internet
+    - LAN
+      - IP Type: Static IP
+      - IP Address: 192.168.0.2
+      - Subnet Mask: 255.255.255.0
+      - Default Gateway: 192.168.0.1
+      - Primary DNS: 9.9.9.9
+      - Secondary DNS: 149.112.112.112
+  - Wireless
+    - Wireless Settings
+      - OFDMA: Enable
+      - TWT: Disabled
+      - Smart Connect: Enable
+      - Security: WPA-PSK[AES]
+      - Transmit Power: Low
+      - 2.4 GHz Channel Width: 20 MHz
+      - 2.4 GHz Channel: 11
+      - 5 GHz Channel Width: 20/40/80 MHz
+      - 5 GHz Channel: 149
+    - WPS
+      - WPS: Disabled
+  - Advanced
+    - System
+      - Access Point Mode
+      - Reboot Schedule
+        - Reboot Schedule: Enabled
+        - Reboot Time: 3:00 AM
+        - Repeat: Every Week Monday
+
+  - Smart Connect: Enabled
+    - This lets the device use the same wirelss setting (e.g., SSID) and the device manages band assignment
+  - Configure new access point
