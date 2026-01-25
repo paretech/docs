@@ -246,7 +246,117 @@ VS Code will:
 
 ---
 
-## 11. Operating Philosophy
+## 11. Using Windows Editors from WSL
+
+WSL can run Windows executables directly, allowing you to open files in Windows editors from the Linux command line.
+
+### Sublime Text Example
+
+Create a symbolic link to the Windows executable:
+
+```bash
+sudo ln -s "/mnt/c/Program Files/Sublime Text 3/subl.exe" /usr/local/bin/subl
+```
+
+This creates a persistent link in `/usr/local/bin/`, which is already in your `$PATH`.
+
+Now you can open files from WSL:
+
+```bash
+subl install.sh
+subl ~/projects/repo/
+```
+
+### Why This Works
+
+- WSL has interoperability with Windows executables (`.exe` files)
+- Windows programs are accessible via `/mnt/c/`
+- `/usr/local/bin/` is the standard location for locally installed executables
+- The symlink persists across reboots—it's a permanent file in the filesystem
+
+### Other Editors
+
+The same pattern works for any Windows editor with a CLI:
+
+```bash
+# Notepad++
+sudo ln -s "/mnt/c/Program Files/Notepad++/notepad++.exe" /usr/local/bin/npp
+
+# Generic pattern
+sudo ln -s "/mnt/c/path/to/editor.exe" /usr/local/bin/editor-name
+```
+
+### Verifying the Path
+
+If the symlink doesn't work, verify the Windows path exists:
+
+```bash
+ls "/mnt/c/Program Files/Sublime Text 3/"
+```
+
+---
+
+## 12. Setting Up ZSH (Optional)
+
+Ubuntu defaults to Bash, but ZSH offers better autocompletion, history, and plugin support.
+
+### Install ZSH
+
+```bash
+sudo apt install -y zsh
+```
+
+### Set ZSH as Default Shell
+
+```bash
+chsh -s $(which zsh)
+```
+
+Log out and back in (close and reopen the terminal) for this to take effect.
+
+### Install Oh My Zsh (Recommended)
+
+Oh My Zsh provides sensible defaults, themes, and plugin management:
+
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+This will:
+
+- Install to `~/.oh-my-zsh/`
+- Create `~/.zshrc` with defaults
+- Set the `robbyrussell` theme
+
+### Minimal Configuration
+
+Edit `~/.zshrc` to enable useful plugins:
+
+```bash
+plugins=(git z)
+```
+
+- **git** — Adds aliases and completion for Git commands
+- **z** — Jump to frequently used directories (e.g., `z proj` → `~/projects`)
+
+### Why ZSH
+
+- Better tab completion (case-insensitive, partial matching)
+- Shared history across sessions
+- Syntax highlighting (with plugin)
+- Large ecosystem of themes and plugins
+
+### Keeping It Minimal
+
+In the spirit of "nuke and pave", avoid over-customizing. Stick to:
+
+- Default Oh My Zsh theme
+- 2-3 plugins max
+- No custom scripts that would be painful to recreate
+
+---
+
+## 13. Operating Philosophy
 
 - Treat WSL as **disposable**
 - Keep projects in git
@@ -257,7 +367,7 @@ This matches modern cloud/CI mental models and keeps friction low.
 
 ---
 
-## 12. Alternatives (Not Documented Here)
+## 14. Alternatives (Not Documented Here)
 
 These are valid, but intentionally not part of the happy path:
 
