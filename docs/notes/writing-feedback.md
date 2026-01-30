@@ -86,6 +86,40 @@ When two or more words work together as a single modifier **before a noun**, the
 
 **Spotted in**: "well behaved" before "model" — should be "well-behaved model." However, "fully constrained" was actually correct as-is because of the -ly exception.
 
+## Coordinate Adjectives
+
+### What are Coordinate Adjectives?
+
+Coordinate adjectives are two or more adjectives that independently modify the same noun. They should be separated by a comma.
+
+### How to Tell if Adjectives are Coordinate
+
+Two tests — if either passes, use a comma:
+
+1. **Swap test**: Can you reverse the order and it still sounds natural?
+2. **"And" test**: Can you insert "and" between them and it still reads well?
+
+### Example
+
+> I implemented the design using the no-cost, non-commercial version of Fusion 360.
+
+- Swap test: "non-commercial, no-cost version" — sounds fine
+- "And" test: "no-cost and non-commercial version" — sounds fine
+- Both pass → use a comma
+
+### Coordinate vs. Cumulative Adjectives
+
+Not all adjacent adjectives are coordinate. **Cumulative adjectives** build on each other in a specific order and do NOT take a comma.
+
+| Type | Example | Comma? |
+|------|---------|--------|
+| **Coordinate** | a no-cost, non-commercial version | Yes |
+| **Cumulative** | a big red barn | No |
+
+"Big red barn" is cumulative because "red barn" is a unit that "big" modifies — you wouldn't say "red big barn" or "big and red barn."
+
+**Spotted in**: "no-cost non-commercial version" — needed a comma because both adjectives independently describe "version."
+
 ## Common Idioms
 
 ### give (someone) pause
