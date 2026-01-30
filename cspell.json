@@ -2,15 +2,16 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "Bambu",
+    "livereload",
     "mkdocs",
     "paretech",
-    "zensical",
-    "venv",
+    "pyenv",
     "pyproject",
-    "virtualenv",
     "setuptools",
-    "livereload",
-    "pyenv"
+    "venv",
+    "virtualenv",
+    "zensical"
   ],
   "ignorePaths": [
     ".git",

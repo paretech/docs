@@ -1,18 +1,18 @@
 # Leashing a Kinesis Split Keyboard
 
-![Photo showing Kinesis Freestyle 2 split keyboard with the optional VIP3 tenting accessory](20260130_keyboard_leash/tidy_keyboard.JPG)
-
 I’ve been using a [Kinesis Freestyle 2](https://kinesis-ergo.com/shop/freestyle2-for-pc-us/) split keyboard with the optional [VIP3 tenting accessory](https://kinesis-ergo.com/shop/freestyle2-vip3-accessory/) at work and home since 2012.
+
+![Photo showing Kinesis Freestyle 2 split keyboard with the optional VIP3 tenting accessory](20260130_keyboard_leash/tidy_keyboard.JPG)
 
 This keyboard is far from perfect but it is good enough for me and after fourteen years of use, it is also very familiar.
 
 ## Problem
 
-![Photo showing problematic misaligned keyboard halves](20260130_keyboard_leash/unleashed_keyboard.JPG)
-
 The biggest problem I have with this keyboard is the two halves tend to drift apart with use. The drift can vary depending on desk finish, cleanliness, and which rubber feet are installed underneath.
 
-I’ve searched the internet several times over the years for existing 3D printable designs to address this problem. I’ve found a few accessories but they tend to have the following deficiencies.
+![Photo showing problematic misaligned keyboard halves](20260130_keyboard_leash/unleashed_keyboard.JPG)
+
+I have searched the internet several times over the years for existing 3D printable designs to address this problem. I’ve found a few accessories but they tend to have the following deficiencies.
 
 - Large structures and print volumes  
 - User complaints about moving or falling off mounts  
