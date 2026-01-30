@@ -78,6 +78,6 @@ I made the final prints with the following configuration.
 
 ![Photo showing "leashed" split keyboard after installing the new brackets](20260130_keyboard_leash/leashed_keyboard.JPG)
 
-I printed and installed two of these brackets. They fit like a glove and are easily removed.
+I printed and installed two of the brackets. The brackets have a minimal appearance when installed. They fit like a glove and are easily removed.
 
-I am pleased with the results. The brackets have a minimal appearance when installed. Most importantly, they solve the problem by drastically minimizing keyboard drift throughout the day!
+I am pleased with the results. They solve the problem by drastically minimizing keyboard drift throughout the day!
