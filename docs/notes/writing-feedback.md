@@ -57,6 +57,35 @@ This is incorrect because both parts are independent clauses:
 - Not: compatability
 - Tip: Comes from "compatible" → drop the 'e', add "-ibility" (not "-ability")
 
+## Verb Tense: choose vs. chose vs. chosen
+
+English irregular verbs don't follow the regular "-ed" pattern for past tense. **Choose** is a common source of errors because the spelling change is subtle.
+
+| Tense | Form | Example |
+|-------|------|---------|
+| **Present** | choose | I choose a color every morning. |
+| **Past** | chose | I chose blue yesterday. |
+| **Past participle** | chosen | I have chosen blue three days in a row. |
+
+**Why it matters**: Using "choose" when describing a past event makes the sentence read as present tense, which confuses the timeline of your narrative.
+
+**Spotted in**: "I choose a friction wedge retention mechanism" — should be "I **chose** a friction wedge retention mechanism" because the decision was already made.
+
+## Compound Adjective Hyphenation
+
+When two or more words work together as a single modifier **before a noun**, they should be hyphenated. This prevents ambiguity about which words modify what.
+
+| Position | Hyphenate? | Example |
+|----------|------------|---------|
+| **Before the noun** | Yes | A well-behaved model |
+| **After the noun** | No | The model is well behaved |
+
+**Common examples**: well-known author, high-quality material, self-locking mechanism, fully-constrained model.
+
+**Exception**: Adverbs ending in "-ly" are never hyphenated (e.g., "a fully constrained model" is correct without a hyphen because "fully" is an -ly adverb — the reader already knows it modifies the next word).
+
+**Spotted in**: "well behaved" before "model" — should be "well-behaved model." However, "fully constrained" was actually correct as-is because of the -ly exception.
+
 ## Common Idioms
 
 ### give (someone) pause
