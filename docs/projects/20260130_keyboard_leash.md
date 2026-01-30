@@ -78,22 +78,6 @@ I made the final prints with the following configuration.
 
 ![Photo showing "leashed" split keyboard after installing the new brackets](20260130_keyboard_leash/leashed_keyboard.JPG)
 
-For increased stability, I printed and installed two of these brackets. They fit like a glove and are easily removed.
-
-### Features
-
-- No modification needed to keyboard or tenting accessories  
-- Low-profile self-locking retention mechanism
-- Quick print, minimal volume, no supports  
-- Easy to modify via fully symmetric sketch-driven design
-
-### Weaknesses
-
-- Fixed distance between split halves.  
-- Design changes required to accommodate five- and ten-degree lifters.  
-- No easy way to add rubber feet to brackets to further reduce drift.  
-- The brackets are not perfectly rigid, some movement is still possible. May need to use two brackets to stabilize.
-
-If I make any additional refinements now, it would be to add recessed features to accept rubber feet. Having additional rubber feet will help resist movement as dust builds up on desk surfaces.
+I printed and installed two of these brackets. They fit like a glove and are easily removed.
 
 I am pleased with the results. The brackets have a minimal appearance when installed. Most importantly, they solve the problem by drastically minimizing keyboard drift throughout the day!
