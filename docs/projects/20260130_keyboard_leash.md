@@ -49,7 +49,7 @@ If needed, the distance can be changed in the model by updating a single half di
 
 ## Implementation
 
-I implemented the design using the no-cost non-commercial version of Fusion 360.
+I implemented the design using the no-cost, non-commercial version of Fusion 360.
 
 A single sketch defining one side of the bracket does most of the work. This single sketch is then extruded, chamfered and then mirrored as a single body.
 
