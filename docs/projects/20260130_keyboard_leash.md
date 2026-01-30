@@ -1,6 +1,6 @@
 # Leashing a Split Keyboard
 
-I’ve been using a [Kinesis Freestyle 2](https://kinesis-ergo.com/shop/freestyle2-for-pc-us/) split keyboard with the optional [VIP3 tenting accessory](https://kinesis-ergo.com/shop/freestyle2-vip3-accessory/) at work and home since 2012.
+I have been using a [Kinesis Freestyle 2](https://kinesis-ergo.com/shop/freestyle2-for-pc-us/) split keyboard with the optional [VIP3 tenting accessory](https://kinesis-ergo.com/shop/freestyle2-vip3-accessory/) at work and home since 2012.
 
 ![Photo showing Kinesis Freestyle 2 split keyboard with the optional VIP3 tenting accessory](20260130_keyboard_leash/tidy_keyboard.JPG)
 
