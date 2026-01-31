@@ -12,7 +12,7 @@ The biggest problem I have with this keyboard is the two halves tend to drift ap
 
 ![Photo showing problematic misaligned keyboard halves](20260130_keyboard_leash/unleashed_keyboard.JPG)
 
-I have searched the internet several times over the years for existing 3D printable designs to address this problem. I’ve found a few accessories but they tend to have the following deficiencies.
+I have searched the internet several times over the years for existing 3D printable designs to address this problem. I have found a few accessories but they tend to have the following deficiencies.
 
 - Large structures and print volumes  
 - User complaints about moving or falling off mounts  
@@ -27,7 +27,7 @@ I tried to keep the design as simple as possible as I am a beginning modeler and
 
 ### Locking Mechanism
 
-In the spirit of simplicity, I chose a friction wedge retention mechanism to secure the two keyboard halves. This means no fancy locking features or hardware. Instead I’m using the natural angle of the existing VIP3 tenting feature and the weight of the keyboard to create a self-locking mechanism.
+In the spirit of simplicity, I chose a friction wedge retention mechanism to secure the two keyboard halves. This means no fancy locking features or hardware. Instead I am using the natural angle of the existing VIP3 tenting feature and the weight of the keyboard to create a self-locking mechanism.
 
 This locking mechanism strongly resists the two keyboard halves from moving closer or further apart from each other in the horizontal direction. However, the mechanism is less effective at resisting the two halves from moving forward or back relative to each other because the tenting feature can slide more easily in the slot in that direction.
 
