@@ -8,11 +8,14 @@ Useful for interviews, resume framing, and role evaluation.
 
 ## Impact Questions
 
-Shift mindset from "what did you do?" to "why did it matter you were there?".
+Shift mindset from "what did you do" to "why did it matter".
 
 For each position or project, answer these questions.
 
-These questions are deliberately written in first person singular voice to form self-referential prompts.
+!!! warning "If these questions feel difficult"
+
+    1. Answer the question directly (no resume pressure)
+    2. Refine answer in simple terms
 
 Try to respond to these questions in single-line bullet form. Doing so will make indecision less likely and easier to revisit and refine. If you are having trouble, feel free to use a longer narrative form, but realize that may be expensive.
 
