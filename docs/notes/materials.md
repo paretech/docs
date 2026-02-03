@@ -14,3 +14,8 @@ Materials worth remembering
 ## Motor Drivers
 
 - [ODrive S1](https://shop.odriverobotics.com/products/odrive-s1)
+
+## Displays
+
+- [Colluck Company Panel Maters](http://www.colluck.com.hk/diyhp/9359/enus/l25521-0/Digital_Panel_Meters.html)
+  - [CX101 Miniature LCD Panel Meter](https://www.circuitspecialists.com/lcd-panel-meter-cx101a)
