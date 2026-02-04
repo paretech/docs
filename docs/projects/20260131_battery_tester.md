@@ -25,3 +25,4 @@
   - MOSFET: IRFZ44N
   - Current Sense IC: AC712
 - <https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf>
+- IXTH75N10L2 linear FET, IRFP250N
