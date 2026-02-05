@@ -26,3 +26,7 @@
   - Current Sense IC: AC712
 - <https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf>
 - IXTH75N10L2 linear FET, IRFP250N
+- <https://www.youtube.com/watch?v=NScaRQj53l0>
+  - <https://github.com/Dominik-Workshop/electronic-load>
+- [Electronic DC Load by Scullcom Hobby Electronics](https://www.youtube.com/playlist?list=PLUMG8JNssPPzbr4LydbTcBrhoPlemu5Dt)
+  
