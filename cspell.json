@@ -9,6 +9,7 @@
     "pyenv",
     "pyproject",
     "setuptools",
+    "varactor",
     "venv",
     "virtualenv",
     "zensical"
