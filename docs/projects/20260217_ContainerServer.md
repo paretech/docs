@@ -29,17 +29,30 @@ ip --brief address
 ssh <username>@<server_ip>
 ```
 
-If all works as expected, can discard the crash cart (i.e., monitor and keyboard).
-
 ## Network Configuration
 
 Add a static route to DHCP server then configure the server network interface with static IP. In this case, DHCP resides on the primary router.
 
 Configuring the server with static IP will make it accessible in a deterministic and standalone way. This is particularly important when things go wrong or when trying to access the system outside the deployed environment.
 
-```bash
+Should the network be configured via /etc/network/interfaces or via /etc/
 
+There a number of different ways (systemd, interfaces, networkmanager, etc...) to configure network based off information from the [Debian Reference](https://www.debian.org/doc/manuals/debian-reference/ch05.en.html) and [Debian Wiki](https://wiki.debian.org/NetworkConfiguration?utm_source=chatgpt.com). I opted for the simplest method of using `interfaces` as that is what was configured for DHCP out of the installer. I assumed this would be acceptable until I have a reason for needing something more advanced.
+
+Find the target interface using `ip --brief link show` then edit `/etc/network/interfaces`. Remove the two `allow-hotplug <interface>` and `iface <interface> inet dhcp`. These were for DHCP. Add the following contents to the `primary network interface` section.
+
+```interfaces
+auto <interface>
+iface <interface> inet static
+    address <server_ip>/<server_subnetmask>
+    gateway <gateway_ip>>
 ```
+
+See `man interfaces` for additional documentation of this file.
+
+I did some ad-hoc testing where I performed an `if down <interface>` and `if up <interface>`, reboot, physically connected and disconnected interface cable and added other hardware interface (e.g., Thunderbolt dock) to make sure system behaved the way I expected.
+
+If all works as expected, discard the crash cart (i.e., monitor and keyboard) and switch to SSH.
 
 ## Client SSH Configuration
 
@@ -59,7 +72,22 @@ chmod a-rwx,u+rwx .ssh/id_ed25519_homelab_<client_id>
 ssh -i ~/.ssh/id_ed25519_homelab_<client_id> <username>@<server_ip>
 ```
 
+See [Debian manpages of openssh-client](https://manpages.debian.org/stretch/openssh-client/index.html) for additional context of these commands.
+
 See [GNU Coreutils manual for chmod](https://www.gnu.org/software/coreutils/manual/coreutils.html#Symbolic-Modes-1) for explanation of symbolic notation.
+
+You can optionally define an [SSH client config](https://man.openbsd.org/ssh_config). This can be convenient for simplified user experience (e.g., `ssh <short_name>`).
+
+```config
+Host <short_name>
+    HostName <host_ip>
+    User <user_name>
+    IdentityFile <id_file>
+```
+
+Now you can connect from your client machine by simply executing `ssh short_name`!
+
+See also [OpenSSH Manual Pages](https://www.openssh.org/manual.html).
 
 ## Install Helper Packages
 
