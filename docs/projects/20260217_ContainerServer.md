@@ -1,31 +1,75 @@
 # Container Server
 
-- Dell Wyse 5070 (hereinafter "server")
+- Dell Wyse 5070 (hereinafter "the server")
 - Debian 13 (for stability)
 - Headless
 - Docker Compose
 
-## Phase 1 - Install OS
+I haven't used vanilla Debian in ages and even then very little. I am most familiar with Arch and have some experience with Fedora, Red Hat and Ubuntu.
 
-- Installed Debian 13 ("trixie") from Ventoy deployed "net" ISO
-- Debian 13.3 was released on January 10th, 2026. Debian 13.0 was initially released on August 9th, 2025.  
+Debian is the "Base" for Ubuntu. [Debian touts itself](https://www.debian.org/intro/why_debian) as being mature, secure, reliable, stable, with long term support (five-year LTS).
 
-I haven't used vanilla Debian in ages. Here is how Chat GPT frames it within the context of environments I'm more familiar with (i.e., Arch, Fedora, Ubuntu, Red Hat).
+Debian 13.3 was released on January 10th, 2026. Debian 13.0 was initially released on August 9th, 2025.  
 
-- Philosophy: Ultra-stable, conservative, community-driven; “boring in a good way.”
-- Release cadence: Slow, predictable; Stable branch prioritized over newest packages.
-- Branches: stable (prod), testing (next stable), unstable/sid (rolling dev).
-- Packages: Older but well-patched; huge repo; strong dependency hygiene.
-- Init/system: systemd by default (like Ubuntu/Fedora/RHEL now).
-- Package tools: apt/dpkg (same core as Ubuntu, but less Canonical tooling).
-- Defaults: Minimal, no branding/opinionated UX; you assemble what you need.
-- Security model: Very cautious updates; separate security repo; long support.
-- Free software stance: Strict separation of main, contrib, non-free.
-- Relation to others:
-- Ubuntu = Debian + faster releases + Canonical polish.
-- RHEL/Fedora = more enterprise/bleeding-edge vs Debian stability.
-- Best use cases: Servers, appliances, containers, long-lived infra.
-- Mental model: Arch control + Ubuntu tooling − churn − corporate layer = Debian.
+## Install OS
+
+I installed Debian 13 ("trixie") on the server using the "netinst" ISO. I maintain a [Ventoy](https://www.ventoy.net/en/index.html) USB drive, so it was a breeze to copy and paste the ISO and boot from local terminal.
+
+I did not follow install instructions, the installer is very familiar. There is [plenty of literature](https://d-i.debian.org/manual/en.amd64/index.html) if needed. I used the traditional installer rather than graphical. I used the single disk defaults with following package selection.
+
+- [ ] Desktop environment
+- [ ] Webserver
+- [X] SSH Server
+- [X] Standard system utilities
+
+After installation there is a "root" and a standard user account. I confirmed I could login from the terminal using the standard user and `su` to root. I then confirmed I could SSH into the standard user account from a remote system on the network.
+
+```bash
+ip --brief address
+ssh <username>@<server_ip>
+```
+
+If all works as expected, can discard the crash cart (i.e., monitor and keyboard).
+
+## Network Configuration
+
+Add a static route to DHCP server then configure the server network interface with static IP. In this case, DHCP resides on the primary router.
+
+Configuring the server with static IP will make it accessible in a deterministic and standalone way. This is particularly important when things go wrong or when trying to access the system outside the deployed environment.
+
+```bash
+
+```
+
+## Client SSH Configuration
+
+Repeat this section for each client needed.
+
+```bash
+# Create client key pair
+ssh-keygen -t ed25519 -C "homelab" -f ~/.ssh/id_ed25519_homelab_<client_id>
+
+# Copy client public key to server
+ssh-copy-id -i ~/.ssh/id_ed25519_homelab_<client_id> <username>@<server_ip>
+
+# Set client local permissions
+chmod a-rwx,u+rwx .ssh/id_ed25519_homelab_<client_id>
+
+# Test key authentication
+ssh -i ~/.ssh/id_ed25519_homelab_<client_id> <username>@<server_ip>
+```
+
+See [GNU Coreutils manual for chmod](https://www.gnu.org/software/coreutils/manual/coreutils.html#Symbolic-Modes-1) for explanation of symbolic notation.
+
+## Install Helper Packages
+
+```bash
+# Update package list (but don't upgrade)
+apt update
+apt list --upgradable --all-versions
+
+apt sudo vim
+```
 
 ## Phase 2 - Make it Headless
 
@@ -44,6 +88,7 @@ Resources
 - <https://www.debian.org/doc/ddp>
 - <https://www.debian.org/doc/user-manuals>
 - <https://www.debian.org/doc/manuals/debian-handbook/index.en.html>
+- <https://www.debian.org/doc/manuals/debian-reference/index.en.html>
 
 ### Maintaining Packages
 
@@ -57,7 +102,6 @@ Resources
 ```sh
 apt update
 apt list --upgradable --all-versions
-
 ```
 
 ### Install Packages
@@ -68,12 +112,16 @@ apt list --upgradable --all-versions
 
 ### 2B SSH Access and Hardening
 
-- From desktop, create new SSH key
-  - `ssh-keygen -t ed25519 -C "infra-homelab" -f C:\Users\<local_user>\.ssh\id_ed25519_homelab`
-- Copy public key to the server
-  - `ssh-copy-id -i /mnt/c/Users/<local_user>/.ssh/id_ed25519_homelab.pub <server_user>@<server_ip>`
-- Verify key from server
-  - `cat ~/.ssh/authorized_keys`
+```bash
+# For each client machine, create new SSH key
+`ssh-keygen -t ed25519 -C "infra-homelab" -f C:\Users\<local_user>\.ssh\id_ed25519_homelab`
+
+# Copy public key to the server
+`ssh-copy-id -i /mnt/c/Users/<local_user>/.ssh/id_ed25519_homelab.pub <server_user>@<server_ip>`
+
+# Verify key from server
+`cat ~/.ssh/authorized_keys`
+```
 
 Known IP address
 
