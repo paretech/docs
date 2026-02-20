@@ -58,6 +58,25 @@ theme:
 
 **Documentation**: [Material - Navigation tabs](https://squidfunk.github.io/mkdocs-material/setup/setting-up-navigation/#navigation-tabs)
 
+### Code Blocks
+
+Syntax highlighting and a copy button are enabled via a theme feature and two PyMdown extensions.
+
+```yaml
+theme:
+  features:
+    - content.code.copy   # adds a clipboard button to every code block
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true  # makes line numbers linkable
+  - pymdownx.superfences     # replaces the default fenced code block handler
+```
+
+`pymdownx.superfences` must be present alongside `pymdownx.highlight`; without it the two handlers conflict and highlighting breaks. It also enables advanced features like nested fences and custom fence types (e.g., Mermaid diagrams).
+
+**Documentation**: [Material - Code blocks](https://squidfunk.github.io/mkdocs-material/reference/code-blocks/)
+
 ### GitHub Actions Workflow
 
 The deployment workflow (`.github/workflows/ci.yml`) uses the modern artifact-based approach rather than the legacy `gh-deploy` method.
