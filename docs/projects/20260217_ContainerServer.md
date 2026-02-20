@@ -29,6 +29,14 @@ ip --brief address
 ssh <username>@<server_ip>
 ```
 
+Additional Debian resources
+
+- <https://www.debian.org/releases/forky/amd64/index.en.html>
+- <https://www.debian.org/doc/ddp>
+- <https://www.debian.org/doc/user-manuals>
+- <https://www.debian.org/doc/manuals/debian-handbook/index.en.html>
+- <https://www.debian.org/doc/manuals/debian-reference/index.en.html>
+
 ## Network Configuration
 
 Add a static route to DHCP server then configure the server network interface with static IP. In this case, DHCP resides on the primary router.
@@ -41,7 +49,7 @@ There a number of different ways (systemd, interfaces, networkmanager, etc...) t
 
 Find the target interface using `ip --brief link show` then edit `/etc/network/interfaces`. Remove the two `allow-hotplug <interface>` and `iface <interface> inet dhcp`. These were for DHCP. Add the following contents to the `primary network interface` section.
 
-```interfaces
+```bash
 auto <interface>
 iface <interface> inet static
     address <server_ip>/<server_subnetmask>
@@ -89,6 +97,80 @@ Now you can connect from your client machine by simply executing `ssh short_name
 
 See also [OpenSSH Manual Pages](https://www.openssh.org/manual.html).
 
+## Install and Configure Sudo
+
+Install Sudo. Sudo includes the visudo subcommand.
+
+```sh
+apt update
+apt install sudo
+```
+
+Add user to sudo group
+
+```sh
+# check which groups <user_name> is already a member of
+groups <user_name>
+
+# add user to sudo group
+usermod --append --groups sudo <user_name>
+
+# verify new groups
+groups <user_name>
+```
+
+After adding user to group. Close all SSH sessions and verify.
+
+```sh
+# Expect <user_name>
+whoami
+
+# Expect root
+sudo whoami
+```
+
+Sudo `/etc/sudoers` is now configured such that any user belonging to the `sudo` group may execute any command as any user. Modifications to the sudoers config should be made with `visudo`. `visudo` is installed as part of the `sudo` package.
+
+See `man sudo` and [Sudo Manual](https://www.sudo.ws/docs/man/sudoers.man/) for additional documentation.
+
+## Disable root SSH access
+
+Edit `/etc/ssh/sshd_config`.
+
+```bash
+# Disable SSH password authentication for all users
+PasswordAuthentication no
+
+# Disable root SSH login
+PermitRootLogin no
+
+# Disable keyboard interactive authentication for all users
+# Note: ChallengeResponseAuthentication is a deprecated alias for KbdInteractiveAuthentication
+KbdInteractiveAuthentication no
+```
+
+!!! warning "Do not close your current SSH session"
+Do not close your current SSH session. You must verify a new login works first or you could lock yourself out.
+
+```bash
+# Restart SSH service
+sudo systemctl restart ssh
+
+# Get service status
+sudo systemctl status ssh
+
+# Inspect systemd log entries for errors, should have similar output as systemctl status
+sudo journalctl --unit ssh --lines 50 --no-pager
+```
+
+Evaluate changes. The following should not be possible. The only way that should be possible now is a standard user with SSH key pair.
+
+- Attempt to login as standard user using name/password.
+- Attempt to login as root using password
+- Attempt to login as root using SSH key (would require setup)
+
+## Disable root terminal login
+
 ## Install Helper Packages
 
 ```bash
@@ -99,9 +181,9 @@ apt list --upgradable --all-versions
 apt sudo vim
 ```
 
-## Phase 2 - Make it Headless
+## Make it Headless
 
-Goal
+Goal:
 
 - SSH access from your main workstation
 - Key-based authentication
@@ -112,13 +194,7 @@ Exit when computer is a remotely managed appliance node.
 
 Resources
 
-- <https://www.debian.org/releases/forky/amd64/index.en.html>
-- <https://www.debian.org/doc/ddp>
-- <https://www.debian.org/doc/user-manuals>
-- <https://www.debian.org/doc/manuals/debian-handbook/index.en.html>
-- <https://www.debian.org/doc/manuals/debian-reference/index.en.html>
-
-### Maintaining Packages
+## Maintaining Packages
 
 - Do this to maintain existing packages and prior to installing new ones.
 - Advanced Packaging Tool (APT)
@@ -126,11 +202,6 @@ Resources
   - "main" fully comply with Debrian Free Software Guidelines
   - "non-free" not (entirely) conform to guidlines
   - "contrib" OSS but cannot function without some "non-free" (section or external) elements
-
-```sh
-apt update
-apt list --upgradable --all-versions
-```
 
 ### Install Packages
 
@@ -151,41 +222,9 @@ apt list --upgradable --all-versions
 `cat ~/.ssh/authorized_keys`
 ```
 
-Known IP address
-
-Known hostname
+## Lock Down Login
 
 Reliable DNS resolution
-
-Verified internet connectivity
-
-Success criteria:
-
-You can ping it from another machine
-
-You can reach Debian package mirrors
-
-Reboot does not change identity
-
-This is the foundation for everything else.
-
-2B — SSH Reachability
-
-Because you selected SSH server during install, now confirm:
-
-Success criteria:
-
-You can SSH from your laptop/desktop
-
-Login works using password first (temporary)
-
-Latency/connection stable across reboots
-
-This is the first true infrastructure control plane.
-
-2C — Key-Based Authentication & Lockdown
-
-Next we transition to real server posture:
 
 Target state:
 
@@ -236,7 +275,7 @@ At that moment, psychologically:
 The machine stops being a “PC”
 and becomes infrastructure
 
-#### Outstanding Items
+### Outstanding Items
 
 - How to reduce friction between windows powershell and WSL instances? I've been trying to use WSL shell as my primary environment.
 - Set server local IP to DHCP IP reservation. This way you can still get into the system even if you don't have a DHCP server or you ar trying to access outside of network. Several other reasons why this is a good idea...
