@@ -1,15 +1,12 @@
 # Container Server
 
-- Dell Wyse 5070 (hereinafter "the server")
-- Debian 13 (for stability)
-- Headless
-- Docker Compose
+The intent is to install headless Debian and Docker on an old Dell Wyse 5070 (hereinafter "server").
 
-I haven't used vanilla Debian in ages and even then very little. I am most familiar with Arch and have some experience with Fedora, Red Hat and Ubuntu.
+I haven't used base Debian much, I am most familiar with Arch. I have used plenty of others distributions like Fedora, Red Hat and Ubuntu in work context. Debian is the "Base" for Ubuntu and [touts itself](https://www.debian.org/intro/why_debian) as being mature, secure, reliable, and stable.
 
-Debian is the "Base" for Ubuntu. [Debian touts itself](https://www.debian.org/intro/why_debian) as being mature, secure, reliable, stable, with long term support (five-year LTS).
+Debian 13.0 was initially released on August 9th, 2025. Debian 13.3 was released on January 10th, 2026. I'll be using the "stable" long term support (LTS) version which is supported for five-years.
 
-Debian 13.3 was released on January 10th, 2026. Debian 13.0 was initially released on August 9th, 2025.  
+For Docker, I'll be using the community edition (CE).
 
 ## Install Debian Linux
 
@@ -231,7 +228,7 @@ dpkg --search <file_path>
 dpkg --listfiles <package_name>
 ```
 
-The base OS layer is now complete! On to "Phase 3 - Container Runtime"
+The base OS layer is now complete! On to the next phase...
 
 ## Install and Configure Docker
 
@@ -249,35 +246,259 @@ Docker engine comes bundled with Docker Desktop for Linux but it is not designed
 
 Some resources
 
-- <https://docs.docker.com/engine/install/debian/>
 - <https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k>
+- <https://docs.docker.com/engine/install/debian/>
+- <https://docs.docker.com/engine/install/debian/#install-using-the-repository>
+- <https://docs.docker.com/engine/install/linux-postinstall>
+- <https://docs.docker.com/get-started/workshop/>
+
+These instructions are more or less verbatim from [dockerdocs](https://docs.docker.com/engine/install/debian/#install-using-the-repository).
 
 ```bash
 # Remove conflicting packages (not likely). Apt will likely report you have none of these installed.
 sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-doc podman-docker containerd runc | cut -f1)
 
-# Install prerequisites
+# Add Docker GPG Key
+sudo apt update
+sudo apt install ca-certificates curl
+# Why 755 permissions?
+sudo install -m 0755 -d /etc/apt/keyrings
+# Why gpg instead of asc?
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add Docker Repo to Apt Sources
+sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/debian
+Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
+Components: stable
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+
+# Install Docker packages
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Docker service starts automatically after install. Verify it is running.
+sudo systemctl status docker
+
+# Docker can be manually started
+sudo systemctl start docker
+
+# Verify successful install by running hello-world image
+sudo docker run hello-world
+
+# Display Docker info
+sudo docker info
 ```
 
-- Add Docker’s GPG key
-- Add Docker APT repository
-- Install:
-  - docker-ce
-  - docker-ce-cli
-  - containerd.io
-  - docker-buildx-plugin
-  - docker-compose-plugin
+## Building the Service Stack
 
-## Outstanding Items
+Goals:
 
-- How to reduce friction between windows powershell and WSL instances? I've been trying to use WSL shell as my primary environment.
-- Set server local IP to DHCP IP reservation. This way you can still get into the system even if you don't have a DHCP server or you ar trying to access outside of network. Several other reasons why this is a good idea...
-- Install SUDO command
-- Wut Podman in relation to Docker?
-- Time sync correct
-- Run your own local DNS server (local entries but otherwise default to quad9)
+- Reverse Proxy (Caddy)
+  - Single entry point with name-based routing
+  - TLS
+  - Centralized auth (Authelia)
+-  
 
-## Terms
+## Create File Structure
+
+For now all the infrastructure services are created under "/srv". As this node gets populated, you might consider adding a second level for "infra", "apps", "experiments", "backups", etc... Since there is not a use case or implementation for those additional layers at this time, I'm simply using "/srv".
+
+To make this change easy later,
+
+- Run compose from the service directory (i.e., location of compose.yml)
+- Use relative bind mounts instead of absolute paths in compose files
+
+The point is, directory moves in Docker setups should be inexpensive and easy to move around. If not, that is a smell.
+
+```bash
+    #!/usr/bin/env bash
+    set -e
+
+    BASE_DIR="/srv"
+
+    declare -a SERVICE_NAMES=("caddy" "portainer" "homeassistant")
+    declare -a BASE_FILES=("compose.yml")
+    declare -a BASE_DIRS=("data" "config")
+
+    echo "Creating base directory: $BASE_DIR"
+    mkdir -p "$BASE_DIR"
+
+    # Create service file structure
+    for service in "${SERVICE_NAMES[@]}"; do
+        service_path="$BASE_DIR/$service"
+
+        echo "Setting up service: $service"
+        mkdir -p "$service_path"
+
+        # Create base files
+        for file in "${BASE_FILES[@]}"; do
+            file_path="$service_path/$file"
+            if [ ! -f "$file_path" ]; then
+                touch "$file_path"
+                echo "  Created file: $file_path"
+            else
+                echo "  File exists: $file_path"
+            fi
+        done
+
+        # Create base directories
+        for dir in "${BASE_DIRS[@]}"; do
+            dir_path="$service_path/$dir"
+            mkdir -p "$dir_path"
+            echo "  Ensured directory: $dir_path"
+        done
+    done
+
+    echo "Done!"
+```
+
+```bash
+    BASE_DIR="/srv"
+    service="caddy"
+    SERVICE_DIR="$BASE_DIR/$service"
+
+    # Brace expansion happens before variable expansion, not inside quotes
+    sudo mkdir -p "$SERVICE_DIR"/{data,config}
+    sudo touch "$SERVICE_DIR"/{compose.yml,Caddyfile}
+```
+
+## Create Docker Network
+
+- <https://docs.docker.com/engine/network/>
+  - "Container networking refers to the ability for containers to connect to and communicate with each other, and with non-Docker network services."
+  - "With the default configuration, containers attached to the default bridge network have unrestricted network access to each other using container IP addresses. They cannot refer to each other by name."
+  - "You can create custom, user-defined networks, and connect groups of containers to the same network. Once connected to a user-defined network, containers can communicate with each other using container IP addresses or container names."
+  - "Connecting a container to a network can be compared to connecting an Ethernet cable to a physical host."
+
+- <https://docs.docker.com/engine/network/drivers/bridge/>
+  - "Allows unrestricted network access to containers in the network from the host, and from other containers connected to the same bridge network."
+  - "By default, the Docker bridge driver automatically installs rules in the host machine so that containers connected to different bridge networks can only communicate with each other using published ports."
+  - "When you start Docker, a default bridge network (also called bridge) is created automatically, and newly-started containers connect to it unless otherwise specified." "This can be a risk, as unrelated stacks/services/containers are then able to communicate."
+  - "User-defined bridge networks are superior to the default bridge network."
+  - "User-defined bridges provide automatic DNS resolution between containers."
+- <https://docs.docker.com/reference/cli/docker/network/>
+
+```bash
+    docker network create proxy
+    docker network ls
+    docker network inspect proxy
+```
+
+## Compose Caddy
+
+Create file structure
+
+```bash
+    SERVICE="caddy"
+    BASE_DIR="/srv"
+    SERVICE_DIR="$BASE_DIR/$SERVICE"
+
+    # Brace expansion happens before variable expansion, not inside quotes
+    sudo mkdir -p "$SERVICE_DIR"/{conf,data,state}
+    sudo touch "$SERVICE_DIR"/{compose.yml,}
+    sudo touch "$SERVICE_DIR/conf"/{caddyfile,}
+```
+
+Create Docker network
+
+```bash
+    docker network create proxy
+    docker network ls
+    docker network inspect proxy
+```
+
+<https://caddyserver.com/docs/running#docker-compose>
+
+Populate compose.yml. Our volumes are defined a bit different than the Caddy documentation. Our intent is to have light weight easy to review and rebuild which means the files are within our /srv directory and not embedded in the container.
+
+```yml
+    services:
+    caddy:
+        image: caddy:2
+        container_name: caddy
+        restart: unless-stopped
+
+        # Only Caddy publishes ports to the host.
+        # All other services remain internal to the proxy network.
+        ports:
+        - "80:80"
+        - "443:443"
+
+        networks:
+        - proxy
+
+        volumes:
+        # Our declarative Caddy configuration
+        - ./conf:/etc/caddy
+
+        # TLS certificates, ACME account data, internal CA
+        - ./data:/data
+
+        # Caddy runtime metadata/state (not manually edited)
+        - ./state:/config
+
+    networks:
+    proxy:
+        # Pre-created user-defined bridge network
+        external: true
+```
+
+```bash
+# Inspect service config and file structure
+cd /srv/caddy
+ls -la
+
+# Start Caddy
+docker compose up --detach
+
+# Verify running
+docker ps
+
+# Check logs
+docker logs --follow caddy
+docker logs --tail=100 caddy
+
+# Make changes to compose.yaml and restart
+docker compose restart
+
+# Tear down (only if needed)
+docker compose down
+docker compose up --detach
+
+# Make changes to Caddyfile and reload
+docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+
+# inspect port binding
+ss -tulpn
+
+# Inspect docker network
+docker network inspect proxy --format '{{json .Containers}}' | jq .
+
+# Confirm only caddy is exposing ports
+docker ps --format 'table {{.Names}}\t{{.Ports}}'
+
+# Fetch output
+curl -v http://127.0.0.1/
+
+# Try opening from browser on a computer on the network!
+```
+
+## Next Steps
+
+- Verify time sync
+- File structure
+- Docker network
+- Install Caddy
+- Local DNS
+- Portainer
+- Home assistant
+
+## Other Topics
 
 - Forward DNS resolves name to IP address
 - Reverse DNS resolves IP to name (mostly cosmetic)
@@ -286,3 +507,6 @@ sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-doc podm
 - Docker Community Edition (CE)
 - Docker Enterprise Edition (EE)
 - Podman
+- Portainer
+- Borg
+- Restic
