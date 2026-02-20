@@ -11,7 +11,7 @@ Debian is the "Base" for Ubuntu. [Debian touts itself](https://www.debian.org/in
 
 Debian 13.3 was released on January 10th, 2026. Debian 13.0 was initially released on August 9th, 2025.  
 
-## Install OS
+## Install Debian Linux
 
 I installed Debian 13 ("trixie") on the server using the "netinst" ISO. I maintain a [Ventoy](https://www.ventoy.net/en/index.html) USB drive, so it was a breeze to copy and paste the ISO and boot from local terminal.
 
@@ -37,7 +37,7 @@ Additional Debian resources
 - <https://www.debian.org/doc/manuals/debian-handbook/index.en.html>
 - <https://www.debian.org/doc/manuals/debian-reference/index.en.html>
 
-## Network Configuration
+## Configure Network
 
 Use the Debian install default DHCP network configuration for clean infrastructure. This means configuring a known IP address by adding config to router DHCP server.
 
@@ -77,7 +77,7 @@ See also [Debian Reference](https://www.debian.org/doc/manuals/debian-reference/
 
 If you can ping internet resources with and without DNS services, then network config is likely good and you can discard the crash cart (i.e., monitor and keyboard) and switch to SSH.
 
-## Client SSH Configuration
+## Configuration SSH Clients
 
 Repeat this section for each client needed.
 
@@ -148,7 +148,7 @@ Sudo `/etc/sudoers` is now configured such that any user belonging to the `sudo`
 
 See `man sudo` and [Sudo Manual](https://www.sudo.ws/docs/man/sudoers.man/) for additional documentation.
 
-## Disable root SSH access
+## Harden SSH Access
 
 Edit `/etc/ssh/sshd_config`.
 
@@ -233,7 +233,7 @@ dpkg --listfiles <package_name>
 
 The base OS layer is now complete! On to "Phase 3 - Container Runtime"
 
-## Docker
+## Install and Configure Docker
 
 When standing up the system, you have the choice. Use Debian docker or use the official upstream community edition (CE) repo.
 
