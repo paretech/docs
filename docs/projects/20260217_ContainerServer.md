@@ -194,9 +194,10 @@ Check to make sure no failing services or pending upgrades. Run this section as 
 
 - Do this to maintain existing packages and prior to installing new ones.
 - Advanced Packaging Tool (APT)
+- `dpkg` is the low-level package manager for Debian-base systems (install `.deb` files). `dpkg` is the engine underneath `apt`.
 - List of package sources `/etc/apt/sources.list`
-  - "main" fully comply with Debrian Free Software Guidelines
-  - "non-free" not (entirely) conform to guidlines
+  - "main" fully comply with Debian Free Software Guidelines
+  - "non-free" not (entirely) conform to guidelines
   - "contrib" OSS but cannot function without some "non-free" (section or external) elements
 
 ```bash
@@ -217,51 +218,64 @@ sudo apt full-upgrade
 sudo apt autoremove --dry-run
 ```
 
-The base OS layer is now complete! On to "Phase 3 - Container Runtime"
-
-## Fully updated packages
+In the event it is needed, here are some common `dpkg` operations.
 
 ```bash
-sudo apt update
+# List installed packages 
+dpkg --list
 
+# Which package owns a file
+dpkg --search <file_path>
+
+# List files installed by a package
+dpkg --listfiles <package_name>
 ```
 
-## More Next Steps
+The base OS layer is now complete! On to "Phase 3 - Container Runtime"
 
-Clean reboot
+## Docker
 
-SSH comes back automatically
+When standing up the system, you have the choice. Use Debian docker or use the official upstream community edition (CE) repo.
 
-Time sync correct
+`docker-ce` is provided by docker.com, `docker.io` is provided by Debian.
 
-No boot errors
+Docker IO is conservative and stable. Docker CE may have newer features and better compose integration. Unless there is a strong reason to use the Debian version, general recommendation is to use Docker CE.
 
-This ensures Docker problems later aren’t actually OS problems.
+The remainder of this document assumes Docker CE.
 
-Gate 2 — Headless Infrastructure Node
+If you are curious about what else is evolving in this space, checkout `Podman` from Red Hat. It just didn't make sense for me at this time.
 
-You pass Gate 2 when:
+Docker engine comes bundled with Docker Desktop for Linux but it is not designed for headless server nodes. It is a developer tool that introduces complexity.
 
-You can manage the Wyse entirely over SSH
+Some resources
 
-Reboot requires no physical interaction
+- <https://docs.docker.com/engine/install/debian/>
+- <https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k>
 
-System identity is stable and known
+```bash
+# Remove conflicting packages (not likely). Apt will likely report you have none of these installed.
+sudo apt remove $(dpkg --get-selections docker.io docker-compose docker-doc podman-docker containerd runc | cut -f1)
 
-Console can be unplugged and forgotten
+# Install prerequisites
+```
 
-At that moment, psychologically:
-
-The machine stops being a “PC”
-and becomes infrastructure
-
-Run your own local DNS server (local entries but otherwise default to quad9)
+- Add Docker’s GPG key
+- Add Docker APT repository
+- Install:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
 
 ## Outstanding Items
 
 - How to reduce friction between windows powershell and WSL instances? I've been trying to use WSL shell as my primary environment.
 - Set server local IP to DHCP IP reservation. This way you can still get into the system even if you don't have a DHCP server or you ar trying to access outside of network. Several other reasons why this is a good idea...
 - Install SUDO command
+- Wut Podman in relation to Docker?
+- Time sync correct
+- Run your own local DNS server (local entries but otherwise default to quad9)
 
 ## Terms
 
@@ -269,3 +283,6 @@ Run your own local DNS server (local entries but otherwise default to quad9)
 - Reverse DNS resolves IP to name (mostly cosmetic)
 - Forward Proxy
 - Reverse Proxy
+- Docker Community Edition (CE)
+- Docker Enterprise Edition (EE)
+- Podman
