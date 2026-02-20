@@ -52,8 +52,11 @@ ip --brief link
 # List IP addresses
 ip --brief address
 
-# Test internet without DNS (Cloudflare DNS IP)
-ping -c3 1.1.1.1
+# List nameserver config
+cat /etc/resolv.conf
+
+# Test internet without DNS (Quad9)
+ping -c3 9.9.9.9
 
 # Test internet with DNS
 ping -c3 google.com
@@ -162,7 +165,8 @@ KbdInteractiveAuthentication no
 ```
 
 !!! warning "Do not close your current SSH session"
-Do not close your current SSH session. You must verify a new login works first or you could lock yourself out.
+
+    Do not close your current SSH session. You must verify a new login works first or you could lock yourself out.
 
 ```bash
 # Restart SSH service
@@ -173,6 +177,9 @@ sudo systemctl status ssh
 
 # Inspect systemd log entries for errors, should have similar output as systemctl status
 sudo journalctl --unit ssh --lines 50 --no-pager
+
+# Double check config
+grep -E '^[[:space:]]*(PermitRootLogin|PasswordAuthentication|KbdInteractiveAuthentication)[[:space:]]+' /etc/ssh/sshd_config
 ```
 
 Evaluate changes. The following should not be possible. The only way that should be possible now is a standard user with SSH key pair.
@@ -181,38 +188,9 @@ Evaluate changes. The following should not be possible. The only way that should
 - Attempt to login as root using password
 - Attempt to login as root using SSH key (would require setup)
 
-## Disable root terminal login
+## Check services and updates (run as needed)
 
-### Install Packages
-
-### 2A — Network Identity
-
-- Assigned static IP address for server at router by binding MAC address to `<server_ip>`.
-
-### 2B SSH Access and Hardening
-
-```bash
-# For each client machine, create new SSH key
-`ssh-keygen -t ed25519 -C "infra-homelab" -f C:\Users\<local_user>\.ssh\id_ed25519_homelab`
-
-# Copy public key to the server
-`ssh-copy-id -i /mnt/c/Users/<local_user>/.ssh/id_ed25519_homelab.pub <server_user>@<server_ip>`
-
-# Verify key from server
-`cat ~/.ssh/authorized_keys`
-```
-
-## Lock Down Login
-
-## Next Steps
-
-Reliable DNS resolution
-
-Before installing Docker, confirm OS health:
-
-Success criteria:
-
-## Fully updated packages
+Check to make sure no failing services or pending upgrades. Run this section as maintenance activity as needed.
 
 - Do this to maintain existing packages and prior to installing new ones.
 - Advanced Packaging Tool (APT)
@@ -220,6 +198,28 @@ Success criteria:
   - "main" fully comply with Debrian Free Software Guidelines
   - "non-free" not (entirely) conform to guidlines
   - "contrib" OSS but cannot function without some "non-free" (section or external) elements
+
+```bash
+# Check for failed services (expect 0)
+systemctl --failed
+
+# Confirm only expected services are running
+systemctl list-units --type=service --state=running
+
+# Check pending upgrades
+sudo apt update
+sudo apt list --upgradable
+
+# Apply upgrades and remove installed packages (if required)
+sudo apt full-upgrade
+
+# Check unnecessary packages (expect 0)
+sudo apt autoremove --dry-run
+```
+
+The base OS layer is now complete! On to "Phase 3 - Container Runtime"
+
+## Fully updated packages
 
 ```bash
 sudo apt update
@@ -255,8 +255,17 @@ At that moment, psychologically:
 The machine stops being a “PC”
 and becomes infrastructure
 
+Run your own local DNS server (local entries but otherwise default to quad9)
+
 ## Outstanding Items
 
 - How to reduce friction between windows powershell and WSL instances? I've been trying to use WSL shell as my primary environment.
 - Set server local IP to DHCP IP reservation. This way you can still get into the system even if you don't have a DHCP server or you ar trying to access outside of network. Several other reasons why this is a good idea...
 - Install SUDO command
+
+## Terms
+
+- Forward DNS resolves name to IP address
+- Reverse DNS resolves IP to name (mostly cosmetic)
+- Forward Proxy
+- Reverse Proxy
