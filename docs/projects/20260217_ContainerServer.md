@@ -39,28 +39,40 @@ Additional Debian resources
 
 ## Network Configuration
 
-Add a static route to DHCP server then configure the server network interface with static IP. In this case, DHCP resides on the primary router.
+Use the Debian install default DHCP network configuration for clean infrastructure. This means configuring a known IP address by adding config to router DHCP server.
 
-Configuring the server with static IP will make it accessible in a deterministic and standalone way. This is particularly important when things go wrong or when trying to access the system outside the deployed environment.
+Using this configuration method provides stable IP address, automatic DNS, automatic gateway, centralized network control. This makes our environment easier to rebuild without duplicating config.
 
-Should the network be configured via /etc/network/interfaces or via /etc/
-
-There a number of different ways (systemd, interfaces, networkmanager, etc...) to configure network based off information from the [Debian Reference](https://www.debian.org/doc/manuals/debian-reference/ch05.en.html) and [Debian Wiki](https://wiki.debian.org/NetworkConfiguration?utm_source=chatgpt.com). I opted for the simplest method of using `interfaces` as that is what was configured for DHCP out of the installer. I assumed this would be acceptable until I have a reason for needing something more advanced.
-
-Find the target interface using `ip --brief link show` then edit `/etc/network/interfaces`. Remove the two `allow-hotplug <interface>` and `iface <interface> inet dhcp`. These were for DHCP. Add the following contents to the `primary network interface` section.
+Here are some common commands for doing various network related tasks.
 
 ```bash
-auto <interface>
-iface <interface> inet static
-    address <server_ip>/<server_subnetmask>
-    gateway <gateway_ip>>
+# List network interfaces and MAC addresses
+ip --brief link
+
+# List IP addresses
+ip --brief address
+
+# Test internet without DNS (Cloudflare DNS IP)
+ping -c3 1.1.1.1
+
+# Test internet with DNS
+ping -c3 google.com
+
+# Restart network service
+sudo systemctl restart networking
+
+# Stop an interface
+if down <interface>
+
+# Start an interface
+if up <interface>
 ```
 
-See `man interfaces` for additional documentation of this file.
+For additional information on network configuration, see `/etc/network/interfaces` and `man interfaces` for additional documentation of this file.
 
-I did some ad-hoc testing where I performed an `if down <interface>` and `if up <interface>`, reboot, physically connected and disconnected interface cable and added other hardware interface (e.g., Thunderbolt dock) to make sure system behaved the way I expected.
+See also [Debian Reference](https://www.debian.org/doc/manuals/debian-reference/ch05.en.html) and [Debian Wiki](https://wiki.debian.org/NetworkConfiguration?utm_source=chatgpt.com).
 
-If all works as expected, discard the crash cart (i.e., monitor and keyboard) and switch to SSH.
+If you can ping internet resources with and without DNS services, then network config is likely good and you can discard the crash cart (i.e., monitor and keyboard) and switch to SSH.
 
 ## Client SSH Configuration
 
@@ -171,38 +183,6 @@ Evaluate changes. The following should not be possible. The only way that should
 
 ## Disable root terminal login
 
-## Install Helper Packages
-
-```bash
-# Update package list (but don't upgrade)
-apt update
-apt list --upgradable --all-versions
-
-apt sudo vim
-```
-
-## Make it Headless
-
-Goal:
-
-- SSH access from your main workstation
-- Key-based authentication
-- Safe to unplug monitor/keyboard
-- Deterministic network identity
-
-Exit when computer is a remotely managed appliance node.
-
-Resources
-
-## Maintaining Packages
-
-- Do this to maintain existing packages and prior to installing new ones.
-- Advanced Packaging Tool (APT)
-- List of package sources `/etc/apt/sources.list`
-  - "main" fully comply with Debrian Free Software Guidelines
-  - "non-free" not (entirely) conform to guidlines
-  - "contrib" OSS but cannot function without some "non-free" (section or external) elements
-
 ### Install Packages
 
 ### 2A — Network Identity
@@ -224,29 +204,29 @@ Resources
 
 ## Lock Down Login
 
+## Next Steps
+
 Reliable DNS resolution
-
-Target state:
-
-SSH key-only login
-
-Password login disabled
-
-Root remote login disabled
-
-Non-root sudo user used for admin
-
-When done:
-
-The node is safe to leave powered on permanently.
-
-2D — Update & Reboot Confidence
 
 Before installing Docker, confirm OS health:
 
 Success criteria:
 
-Fully updated packages
+## Fully updated packages
+
+- Do this to maintain existing packages and prior to installing new ones.
+- Advanced Packaging Tool (APT)
+- List of package sources `/etc/apt/sources.list`
+  - "main" fully comply with Debrian Free Software Guidelines
+  - "non-free" not (entirely) conform to guidlines
+  - "contrib" OSS but cannot function without some "non-free" (section or external) elements
+
+```bash
+sudo apt update
+
+```
+
+## More Next Steps
 
 Clean reboot
 
@@ -275,7 +255,7 @@ At that moment, psychologically:
 The machine stops being a “PC”
 and becomes infrastructure
 
-### Outstanding Items
+## Outstanding Items
 
 - How to reduce friction between windows powershell and WSL instances? I've been trying to use WSL shell as my primary environment.
 - Set server local IP to DHCP IP reservation. This way you can still get into the system even if you don't have a DHCP server or you ar trying to access outside of network. Several other reasons why this is a good idea...
