@@ -304,6 +304,26 @@ Goals:
   - Centralized auth (Authelia)
 -  
 
+## DNS Authority
+
+See conversation at <https://chatgpt.com/c/6998f7e9-518c-8332-874d-17042c890302>. Weighing three options.
+
+1. Local DNS Overrides (simplest)
+   - Locally host CoreDNS, it's an authoritative local DNS
+   - No router dependency, simply point to local CoreDNS instead of Quad9 resolver.
+   - ?Why is this the cleanest?
+   - Requires
+2. Public DNS + NAT Reflection
+   - Depends on local router capability to detect internal traffic and "hairpin" back inside.
+   - Uses NAT loopback, reflection and hairpin capabilities.
+   - This option is out because it depends on router capability.
+3. DNS Challenge + Local Authoritative Override (cleanest)
+   - ?Why is this the simplest?
+   - Depends on Public DNS (Cloudflare for internet) and Internal DNS (CoreDNS for LAN)
+   - Uses DNS challenge via Cloudflare API
+   - Uses public issued certificate
+   - No CA installation
+
 ## Create File Structure
 
 For now all the infrastructure services are created under "/srv". As this node gets populated, you might consider adding a second level for "infra", "apps", "experiments", "backups", etc... Since there is not a use case or implementation for those additional layers at this time, I'm simply using "/srv".
@@ -470,6 +490,10 @@ docker compose restart
 docker compose down
 docker compose up --detach
 
+# See summary of what is running
+docker images --digests
+
+# Get full digest
 # Make changes to Caddyfile and reload
 docker exec caddy caddy reload --config /etc/caddy/Caddyfile
 
@@ -488,6 +512,54 @@ curl -v http://127.0.0.1/
 # Try opening from browser on a computer on the network!
 ```
 
+## Compose Portainer
+
+<https://docs.portainer.io/start/install-ce/server/docker/linux>
+
+Create file structure
+
+```bash
+    SERVICE="portainer"
+    BASE_DIR="/srv"
+    SERVICE_DIR="$BASE_DIR/$SERVICE"
+
+    # Brace expansion happens before variable expansion, not inside quotes
+    sudo mkdir -p "$SERVICE_DIR"/{data,}
+    sudo touch "$SERVICE_DIR"/{compose.yml,}
+```
+
+```yml
+    services:
+    portainer:
+        image: portainer/portainer-ce:2.38.1
+        container_name: portainer
+        restart: unless-stopped
+        networks:
+        - proxy
+        volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./data:/data
+
+    networks:
+    proxy:
+        external: true
+```
+
+Edit /srv/caddy/conf/Caddyfile and add:
+
+```bash
+portainer.home {
+  reverse_proxy portainer:9000
+}
+```
+
+reload caddy
+docker exec -it caddy caddy validate --config /etc/caddy/Caddyfile
+docker exec -it caddy caddy fmt --overwrite /etc/caddy/Caddyfile
+docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+
+curl -vk <https://127.0.0.1/> -H "Host: portainer.home"
+
 ## Next Steps
 
 - Verify time sync
@@ -497,6 +569,16 @@ curl -v http://127.0.0.1/
 - Local DNS
 - Portainer
 - Home assistant
+
+## Network Summary
+
+- Domain registered at Namecheap
+- DNS hosted at Cloudflare
+- Recursive DNS resolver via Quad9
+- Server (Debian Wyse 5070)
+- Caddy
+- Portainer
+- No local authoritative DNS!!!
 
 ## Other Topics
 
@@ -508,5 +590,18 @@ curl -v http://127.0.0.1/
 - Docker Enterprise Edition (EE)
 - Podman
 - Portainer
-- Borg
-- Restic
+- BorgBackup
+- [Restic backups](https://restic.net/)
+- Recursive DNS resolver
+- Authoritative DNS server
+- Public DNS hosting provider
+- Local DNS override / split-horizon DNS
+- DNS Challenge
+- TLS-ALPN challenge
+- DNS TXT record
+- Local DNS Override
+- Public DNS + NAT Reflection
+- DNS "Hairpin"
+- NAT loopback
+- NAT reflection
+- Hairpin NAT
