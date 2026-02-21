@@ -311,18 +311,19 @@ See conversation at <https://chatgpt.com/c/6998f7e9-518c-8332-874d-17042c890302>
 1. Local DNS Overrides (simplest)
    - Locally host CoreDNS, it's an authoritative local DNS
    - No router dependency, simply point to local CoreDNS instead of Quad9 resolver.
-   - ?Why is this the cleanest?
-   - Requires
+   - Certificate uses DNS challenge with Cloudflare
 2. Public DNS + NAT Reflection
    - Depends on local router capability to detect internal traffic and "hairpin" back inside.
    - Uses NAT loopback, reflection and hairpin capabilities.
    - This option is out because it depends on router capability.
-3. DNS Challenge + Local Authoritative Override (cleanest)
-   - ?Why is this the simplest?
+3. DNS Challenge + Local Authoritative Override "Full Split-Horizon" (cleanest)
    - Depends on Public DNS (Cloudflare for internet) and Internal DNS (CoreDNS for LAN)
    - Uses DNS challenge via Cloudflare API
    - Uses public issued certificate
    - No CA installation
+   - Certificate uses DNS challenge with Cloudflare
+
+WRT to DNS challenge, what is meant by "Caddy proves domain ownership by writing a temporary TXT record into Cloudflare DNS. Let’s Encrypt verifies it"
 
 ## Create File Structure
 
