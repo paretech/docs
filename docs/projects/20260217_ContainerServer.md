@@ -327,6 +327,9 @@ WRT to DNS challenge, what is meant by "Caddy proves domain ownership by writing
 
 ## Create File Structure
 
+!!! "TODO group ownership for editable config, separate from data"
+    Something like creating a "infra" group so that users of that group can edit the files without elevating to root. The intent of this is so that could use remote VS Code to edit without SSH in as root. See discussion at <https://chatgpt.com/c/699a3ace-9dd8-8331-af71-39f2076dd49c>.
+
 For now all the infrastructure services are created under "/srv". As this node gets populated, you might consider adding a second level for "infra", "apps", "experiments", "backups", etc... Since there is not a use case or implementation for those additional layers at this time, I'm simply using "/srv".
 
 To make this change easy later,
@@ -409,6 +412,106 @@ The point is, directory moves in Docker setups should be inexpensive and easy to
     docker network ls
     docker network inspect proxy
 ```
+
+## Compose CoreDNS
+
+CoreDNS was straight forward to setup. I didn't know much about DNS records and concepts so there are some hings to catch up. See following Chats and update.
+
+- <https://chatgpt.com/c/6998f7e9-518c-8332-874d-17042c890302>
+- <https://chatgpt.com/c/699a9259-1a1c-8325-88fb-b7933a6815e5>
+
+## Public DNS and SSL Certificates
+
+<https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-a-cloudflare-account/>
+
+My public DNS authority has and still is with Cloudflare. I'm creating a new zone with Cloudflare for infra.paretech.com and will generate a Cloudflare API token for that zone. My local Caddy instance will use the API token to post TXT records needed to demonstrate domain control for Let's Encrypt. This new zone has no public A records (IPV4), doesn't need to.
+
+So I wasn't able to add a new zone to Cloudflare for infra.paretech.com so I am creating a token for the domain. This seems likely less secure...
+
+<https://developers.cloudflare.com/fundamentals/api/get-started/account-owned-tokens/?preferred-color-scheme=light>
+
+<https://caddyserver.com/docs/modules/dns.providers.cloudflare>
+
+The official Caddy image does not include the [Cloudflare DNS module](https://github.com/caddy-dns/cloudflare). [This module](https://caddyserver.com/docs/modules/dns.providers.cloudflare) does not come with Caddy. It can be added by using xcaddy.
+
+`xcaddy build --with github.com/caddy-dns/cloudflare`
+
+From Cloudflare account management page, create a new single "scoped" API Token.
+
+- Zone.Zone:Read
+- Zone.DNS:Edit
+
+Caddy is extendable through the use of "modules. You can [use the Caddy "builder" image](https://hub.docker.com/_/caddy#adding-custom-caddy-modules) as a short-cut to building a new Caddy binary with these custom modules.
+
+```Dockerfile
+ARG CADDY_VERSION=2.10.2
+
+FROM caddy:${CADDY_VERSION}-builder AS builder
+
+RUN xcaddy build \
+    --with github.com/caddy-dns/cloudflare
+
+FROM caddy:${CADDY_VERSION}
+
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+```
+
+- Replace `image` with local build step.
+- Add Cloudflare API token to compose.yml and .env file\
+
+```yml
+services:
+  caddy:
+    build: .
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
+```
+
+Create a `.env` file.
+
+!!! "@TODO: Security Issue"
+    This doesn't seem like the best long term security option. Shouldn't we keep secretes in environment and load from a file that is outside the git repo such that we don't have to depend on .gitignore and user error?
+
+Create `.env` file
+
+```bash
+CLOUDFLARE_API_TOKEN=your_token_here
+```
+
+Update Caddyfile
+
+```json
+    tls {
+        dns cloudflare {env.CLOUDFLARE_API_TOKEN}
+    }
+```
+
+Reuild caddy
+
+```bash
+docker compose build caddy
+docker compose up -d caddy
+docker logs -f caddy
+```
+
+Now you should be able to navigate to local infra.paretech.com and see the caddy "infra is up" test message with a valid TLS cert! No scary browser warnings or anything.
+
+If you navigate to Cloudflare / Manage Account / Audit logs, you should see a "Create DNS Record" with Acme Challenge and a "Delete DNS Record" for cleanup!!! You will not see any "A" entries pointing to local IP! So nice and clean!!!
+
+`dig TXT _acme-challenge.infra.paretech.com`
 
 ## Compose Caddy
 
@@ -496,6 +599,7 @@ docker images --digests
 
 # Get full digest
 # Make changes to Caddyfile and reload
+docker exec -it caddy caddy fmt --overwrite /etc/caddy/Caddyfile
 docker exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 # inspect port binding
@@ -606,3 +710,4 @@ curl -vk <https://127.0.0.1/> -H "Host: portainer.home"
 - NAT loopback
 - NAT reflection
 - Hairpin NAT
+- bind mount
