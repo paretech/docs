@@ -678,12 +678,36 @@ curl -vk <https://127.0.0.1/> -H "Host: portainer.home"
 ## Network Summary
 
 - Domain registered at Namecheap
-- DNS hosted at Cloudflare
+- Cloudflare public DNS resolver
 - Recursive DNS resolver via Quad9
 - Server (Debian Wyse 5070)
 - Caddy
 - Portainer
-- No local authoritative DNS!!!
+- No public A/AAAA records
+- No port forwarding
+- No public IP exposure
+- No public zone for infra.paretech.com
+- Only TXT records temporarily created for ACME DNS challenge
+- Local CoreDNS authoritative override for *.infra.paretech.com
+- Caddy running internally
+
+When Caddy performs DNS challenge:
+
+It temporarily creates _acme-challenge.infra.paretech.com TXT records
+
+Let’s Encrypt checks those
+
+Certificate is issued
+
+TXT record gets deleted
+
+No A records are required.
+No public exposure required.
+No inbound traffic required.
+
+You’re using DNS challenge correctly for a private network.
+
+This is a best-practice way to get trusted certs internally.
 
 ## Other Topics
 
