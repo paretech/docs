@@ -513,6 +513,27 @@ If you navigate to Cloudflare / Manage Account / Audit logs, you should see a "C
 
 `dig TXT _acme-challenge.infra.paretech.com`
 
+Not too long after setting this up, my home router failed me. It was configured with Quan9 on both the LAN and WAN side and it inexplicably stopped resolving names and worse seemed to be blocking DNS on port 53 for other services. It was weird and not fully understood. A simple restart of the router didn't resolve but connecting a PC directly to the modem worked as expected.
+
+There were some commands I learned about that helped me understand the nature of the issue.
+
+```bash
+# Look up domain associated with an IP
+dig -x 8.8.8.8 +short
+
+# Look up IPv4 address associated with a domain using a specific server
+# one.one.one.one. (Cloudflare)
+dig @1.1.1.1 github.com A
+# dns.google.
+dig @8.8.8.8 github.com A
+# dns9.quad9.net.
+dig @9.9.9.9 github.com A
+dig @149.112.112.112 github.com A
+
+# Can see live log output from CoreDNS docker
+dig @<localDNSIP> github.com A
+```
+
 ## Compose Caddy
 
 Create file structure
@@ -584,8 +605,8 @@ docker compose up --detach
 docker ps
 
 # Check logs
-docker logs --follow caddy
-docker logs --tail=100 caddy
+docker logs --follow --timestamps caddy
+docker logs --tail=100  --timestamps caddy
 
 # Make changes to compose.yaml and restart
 docker compose restart
