@@ -1,5 +1,7 @@
 site_name: Paretech Docs
-site_url: https://paretech.github.io/docs
+site_url: https://docs.paretech.com
+use_directory_urls: true
+use_directory_urls: true
 theme:
   name: material
   logo: assets/paretech_logo.png
