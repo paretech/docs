@@ -24,3 +24,4 @@
 - 32 GB (4x8) 288-Pin DDR 3200 (PC4 25600)
   - G.SKILL Ripjaws V Series (F4-3200C14D-16GVK, F4-3200C16D-16GVGB)
 - Seasonic SSR-850FX 850W ATX Power Supply
+- Noctua NH-D15 SSO2 D-Type CPU Cooler, NF-A15 x 2 PWM Fans
