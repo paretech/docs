@@ -160,6 +160,7 @@ Inside WSL:
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 git config --global init.defaultBranch main
+git config --global pull.rebase true
 ```
 
 ---
