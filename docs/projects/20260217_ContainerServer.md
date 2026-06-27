@@ -92,9 +92,12 @@ chmod a-rwx,u+rwx .ssh/id_ed25519_homelab_<client_id>
 ssh -i ~/.ssh/id_ed25519_homelab_<client_id> <username>@<server_ip>
 ```
 
+Once login passwords are disabled, this procedure does not work. Instead of using `ssh-copy-id` you can manually edit ~/.ssh/authorized_keys to include the public cert of the new machine/user.
 See [Debian manpages of openssh-client](https://manpages.debian.org/stretch/openssh-client/index.html) for additional context of these commands.
 
 See [GNU Coreutils manual for chmod](https://www.gnu.org/software/coreutils/manual/coreutils.html#Symbolic-Modes-1) for explanation of symbolic notation.
+
+If you get a "permission denied (publickey)" error from libcrypto, make sure you supplied the private identity file and not the publick `.pub` file.
 
 You can optionally define an [SSH client config](https://man.openbsd.org/ssh_config). This can be convenient for simplified user experience (e.g., `ssh <short_name>`).
 
@@ -104,6 +107,8 @@ Host <short_name>
     User <user_name>
     IdentityFile <id_file>
 ```
+
+In this configuration, IdentifyFile is the path to your publish SSH key. If you get an error indicating permissions are too open, change the permission on your key so that others can't read it. This is already covered by the `chmod` command in the preceding code block.
 
 Now you can connect from your client machine by simply executing `ssh short_name`!
 
