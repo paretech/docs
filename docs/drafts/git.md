@@ -14,6 +14,8 @@ But this is a problem for solo developers that use push as your backup. Another 
 
 ## Shortcuts and Must Know Commands
 
+HEAD is the pointer to the current branch reference, which is in turn a pointer to the last commit made on that branch. That means HEAD will be the parent of the next commit that is created. It’s generally simplest to think of HEAD as the snapshot of your last commit on that branch.
+
 Shorthand Means
 HEAD Current branch tip
 @ Same as HEAD (even shorter)
@@ -214,6 +216,21 @@ git fetch origin
 git checkout feature/branch
 git rebase main
 git push --force-with-lease origin feature/branch
+```
+
+### Clean up deleted branches
+
+If you work on multiple devices, you may find branches that have been deleted on remote or other local system may still exist.
+
+```bash
+# Prune remote-tracking references (removes origin/feature/whatever for branches deleted on the remote):
+git fetch --prune
+
+# Delete local branches that no longer have a remote counterpart. This finds local branches whose upstream is marked [gone] (remote was deleted) and deletes them safely.
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d
+
+# You can make pruning automatic on every fetch by setting. After that, git fetch and git pull will always clean up stale remote-tracking refs automatically.
+git config --global fetch.prune true
 ```
 
 ## Topics
