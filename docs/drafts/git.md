@@ -277,6 +277,13 @@ git diff branch1 branch2
 
 Say that my repo maintains a set of scripts or tools in addition to the main program code. If I make updates to these tools, how can I sync, access or propagate the new changes to other branches? In addition, what is the ideal strategy if I find this happening a lot or what is the problem?
 
+For solo dev work, should I make these setting changes?
+
+```bash
+git config --global pull.rebase true
+git config --global rebase.autoStash true
+```
+
 ## Next Topics
 
 ### git worktree
