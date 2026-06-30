@@ -209,6 +209,27 @@ The same "integration branch" workflow can be used to develop new features and t
 
 If you find that you need to make a change to one of the feature branches and retest, do not bother merging back in with the integration branch. Instead, just delete it and rebuild from scratch. That is the whole point of integration branches being cheap and inexpensive. They are throwaway!
 
+Depending on your workflow, git worktrees may be a natural way to extend.
+
+### Building Integration Worktree
+
+Adding worktrees creates a new directory.
+
+```bash
+git worktree add -b <new-branch> ../<new-folder-path> <source-commit-or-branch>
+# Build new integration branch from previous section
+```
+
+For the rebuild workflow with worktrees, don't delete the branch — just reset it:
+
+```bash
+cd ../<new-folder-path>
+git reset --hard <source-commit-or-branch>
+# Rebuild integration branch from previous section
+```
+
+The worktree and branch live and die together when you're truly done with integration testing.
+
 ### Keep Long Lived Feature Branches up to Date
 
 Do this periodically on long-lived branches keeps the eventual merge conflict-free. The idea is that small frequent rebases are easier than one big one at the end.
