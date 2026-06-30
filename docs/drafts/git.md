@@ -230,6 +230,19 @@ git reset --hard <source-commit-or-branch>
 
 The worktree and branch live and die together when you're truly done with integration testing.
 
+## Tagging your work
+
+When you use a point in time for something significant (e.g., a software release, version used for significant test event), it is a good idea to mark it. One way to mark it is to use Git tags.
+
+```bash
+# Apply tag
+git tag -a super-formal-test \
+        -m "Build used to to test device SNXYZ"
+
+# Push the tag to origin
+git push origin super-formal-test
+```
+
 ### Keep Long Lived Feature Branches up to Date
 
 Do this periodically on long-lived branches keeps the eventual merge conflict-free. The idea is that small frequent rebases are easier than one big one at the end.
