@@ -207,6 +207,8 @@ git branch --delete test/combined-fix fix/recipe-config fix/reactor-timing
 
 The same "integration branch" workflow can be used to develop new features and test in combination with other features and fixes.
 
+If you find that you need to make a change to one of the feature branches and retest, do not bother merging back in with the integration branch. Instead, just delete it and rebuild from scratch. That is the whole point of integration branches being cheap and inexpensive. They are throwaway!
+
 ### Keep Long Lived Feature Branches up to Date
 
 Do this periodically on long-lived branches keeps the eventual merge conflict-free. The idea is that small frequent rebases are easier than one big one at the end.
