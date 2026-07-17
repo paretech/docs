@@ -71,6 +71,10 @@ git push origin --delete <list_of_branches>
 
 You identify another branch that legitimately needs to be merged in with another (i.e., main). For simplicity, assume attempting to merge "feature/branch" onto "main".
 
+!!! Note
+
+  There is a better way! See ["..." (three-dot) Symmetric Difference Notation](https://git-scm.com/docs/revisions/2.29.0#Documentation/revisions.txt-Thethree-dotSymmetricDifferenceNotation)
+
 ```bash
 src="feature/branch"
 dst="main"
@@ -188,7 +192,7 @@ Sometimes you may want to test or evaluate multiple bug fixes together in a sing
 ```bash
 git checkout main
 
-git checkout --branch test/combined-fix
+git checkout -b test/combined-fix
 
 git merge fix/recipe-config
 git merge fix/reactor-timing
@@ -230,7 +234,7 @@ git reset --hard <source-commit-or-branch>
 
 The worktree and branch live and die together when you're truly done with integration testing.
 
-## Tagging your work
+### Tagging your work
 
 When you use a point in time for something significant (e.g., a software release, version used for significant test event), it is a good idea to mark it. One way to mark it is to use Git tags.
 
@@ -267,6 +271,19 @@ git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d
 
 # You can make pruning automatic on every fetch by setting. After that, git fetch and git pull will always clean up stale remote-tracking refs automatically.
 git config --global fetch.prune true
+```
+
+### Rename a branch
+
+```bash
+# On the branch you want to rename (or use `-m <old> <new>` from elsewhere)
+git branch -m <new_name>
+
+# Push the new name AND set it as the upstream
+git push origin -u <new_name>
+
+# Delete the old name from the remote
+git push origin --delete <old_name>
 ```
 
 ## Topics
